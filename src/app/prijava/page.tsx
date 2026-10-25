@@ -25,7 +25,7 @@ function translate(message: string) {
 export default function Prijava() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("login");
-  const [email, setEmail] = useState("");
+  const [emailInput, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sent, setSent] = useState("");
   const [error, setError] = useState("");
@@ -37,6 +37,8 @@ export default function Prijava() {
     setBusy(true);
     const auth = supabase().auth;
     const origin = window.location.origin;
+    // Mobilne tastature zna dodati razmak ili veliko slovo na početku.
+    const email = emailInput.trim().toLowerCase();
     let result: { error: { message: string } | null } = { error: null };
 
     if (mode === "login") {
@@ -78,9 +80,9 @@ export default function Prijava() {
       <p className="text-sm text-stone-600 dark:text-stone-400">Bez Facebooka. Tvoj email niko drugi ne vidi.</p>
 
       <input className="input" type="email" required placeholder="tvoj@email.com" autoComplete="email"
-        value={email} onChange={(e) => setEmail(e.target.value)} />
+        value={emailInput} onChange={(e) => setEmail(e.target.value)} autoCapitalize="none" />
       {needsPassword && (
-        <input className="input" type="password" required minLength={8} placeholder="Lozinka (najmanje 8 znakova)"
+        <input className="input" type="password" autoCapitalize="none" autoCorrect="off" required minLength={8} placeholder="Lozinka (najmanje 8 znakova)"
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           value={password} onChange={(e) => setPassword(e.target.value)} />
       )}

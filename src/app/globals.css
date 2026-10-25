@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf7f2;
+  --foreground: #2b2118;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #17120e;
+    --foreground: #f1e9df;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.btn {
+  @apply rounded-full bg-amber-700 px-5 py-2 font-medium text-white hover:bg-amber-800 disabled:opacity-50;
+}
+.btn-light {
+  @apply rounded-full border border-amber-700 px-5 py-2 font-medium text-amber-800 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-stone-800;
+}
+.input {
+  @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100;
+}

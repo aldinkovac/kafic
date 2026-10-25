@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/useSession";
+import { ProfilePhotos } from "@/components/ProfilePhotos";
 
 const AVATARS = ["☕", "🌹", "🌙", "🎸", "📚", "⚽", "🏔️", "🌊", "🦉", "🍀", "🎨", "✈️"];
 
@@ -74,6 +75,13 @@ export default function ProfilPage() {
   async function deleteAccount() {
     if (!confirm("Ovo trajno briše tvoj profil, sve poruke i pristanke. Nastaviti?")) return;
     const sb = supabase();
+    // Prvo brišemo fajlove (profilne slike i slike poslane u chat), pa onda nalog.
+    const [{ data: own }, { data: sent }] = await Promise.all([
+      sb.from("profile_photos").select("path").eq("user_id", user!.id),
+      sb.from("private_messages").select("image_path").eq("sender", user!.id).not("image_path", "is", null),
+    ]);
+    const paths = [...(own ?? []).map((p: { path: string }) => p.path), ...(sent ?? []).map((m: { image_path: string }) => m.image_path)];
+    if (paths.length) await sb.storage.from("photos").remove(paths);
     const { error } = await sb.rpc("delete_my_account");
     if (error) return setError(error.message);
     await sb.auth.signOut();
@@ -104,6 +112,12 @@ export default function ProfilPage() {
           ))}
         </div>
       </div>
+
+      {profile ? (
+        <ProfilePhotos userId={user.id} />
+      ) : (
+        <p className="text-xs text-stone-500">Slike možeš dodati čim napraviš profil.</p>
+      )}
 
       <label className="block space-y-1">
         <span className="text-sm font-medium">Grad (neobavezno)</span>

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Bosanska kafa za dvoje: džezva, dva fildžana i rahat lokum na stolu kraj prozora">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6c58f"/>
+      <stop offset="1" stop-color="#f3a46b"/>
+    </linearGradient>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9c4a1f"/>
+      <stop offset="0.5" stop-color="#d98a4e"/>
+      <stop offset="1" stop-color="#8a3f18"/>
+    </linearGradient>
+    <linearGradient id="table" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a4a2a"/>
+      <stop offset="1" stop-color="#5a321b"/>
+    </linearGradient>
+    <clipPath id="win"><rect x="80" y="40" width="480" height="270" rx="16"/></clipPath>
+  </defs>
+
+  <!-- zid -->
+  <rect width="640" height="480" fill="#fbeedd"/>
+
+  <!-- prozor s pogledom na brda i grad -->
+  <g clip-path="url(#win)">
+    <rect x="80" y="40" width="480" height="270" fill="url(#sky)"/>
+    <circle cx="430" cy="140" r="34" fill="#fde7b0"/>
+    <path d="M80 230 Q180 160 280 210 T470 190 T560 200 V310 H80Z" fill="#b5654a" opacity="0.55"/>
+    <path d="M80 260 Q200 210 320 250 T560 235 V310 H80Z" fill="#8f4a36" opacity="0.7"/>
+    <!-- kuće i munara -->
+    <g fill="#6e3526">
+      <rect x="150" y="250" width="26" height="30"/><path d="M146 252 L163 236 L180 252Z"/>
+      <rect x="190" y="258" width="22" height="24"/><path d="M186 260 L201 246 L216 260Z"/>
+      <rect x="300" y="200" width="8" height="70"/><path d="M298 202 L304 182 L310 202Z"/>
+      <rect x="296" y="222" width="16" height="5"/>
+      <path d="M318 270 V248 a20 20 0 0 1 40 0 V270Z"/>
+      <rect x="380" y="252" width="28" height="28"/><path d="M376 254 L394 238 L412 254Z"/>
+      <rect x="425" y="260" width="22" height="22"/><path d="M421 262 L436 248 L451 262Z"/>
+    </g>
+    <g fill="#ffd27a">
+      <rect x="157" y="260" width="5" height="6"/><rect x="166" y="260" width="5" height="6"/>
+      <rect x="198" y="266" width="5" height="6"/><rect x="388" y="262" width="5" height="6"/>
+      <rect x="397" y="262" width="5" height="6"/><rect x="432" y="268" width="5" height="6"/>
+    </g>
+  </g>
+  <rect x="80" y="40" width="480" height="270" rx="16" fill="none" stroke="#7a4a2a" stroke-width="10"/>
+  <line x1="320" y1="40" x2="320" y2="310" stroke="#7a4a2a" stroke-width="6"/>
+
+  <!-- sto -->
+  <rect x="0" y="330" width="640" height="150" fill="url(#table)"/>
+  <rect x="0" y="330" width="640" height="10" fill="#8d5a36"/>
+
+  <!-- tepsija -->
+  <ellipse cx="320" cy="392" rx="230" ry="44" fill="#b8763f"/>
+  <ellipse cx="320" cy="386" rx="214" ry="36" fill="#d4934f"/>
+  <ellipse cx="320" cy="386" rx="214" ry="36" fill="none" stroke="#f0bd7c" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- džezva -->
+  <g>
+    <path d="M285 300 L355 300 L366 382 Q320 396 274 382Z" fill="url(#copper)"/>
+    <ellipse cx="320" cy="300" rx="36" ry="8" fill="#e7a466"/>
+    <ellipse cx="320" cy="300" rx="30" ry="5" fill="#3b2314"/>
+    <path d="M284 300 L262 292 L270 304Z" fill="#c4743d"/>
+    <rect x="356" y="318" width="80" height="10" rx="5" fill="#5a321b" transform="rotate(-12 356 318)"/>
+  </g>
+
+  <!-- para -->
+  <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8">
+    <path d="M305 286 q-10 -16 0 -30 q10 -14 0 -30"/>
+    <path d="M330 282 q10 -16 0 -30 q-10 -14 0 -30"/>
+  </g>
+
+  <!-- fildžan lijevo -->
+  <g>
+    <ellipse cx="188" cy="392" rx="40" ry="10" fill="#c98a4c"/>
+    <path d="M164 352 L212 352 L206 388 Q188 396 170 388Z" fill="#fffaf2"/>
+    <path d="M166 362 L210 362" stroke="#2f6f8f" stroke-width="5"/>
+    <path d="M168 374 L208 374" stroke="#b0303a" stroke-width="3"/>
+    <ellipse cx="188" cy="352" rx="24" ry="6" fill="#3b2314"/>
+  </g>
+
+  <!-- fildžan desno -->
+  <g>
+    <ellipse cx="452" cy="392" rx="40" ry="10" fill="#c98a4c"/>
+    <path d="M428 352 L476 352 L470 388 Q452 396 434 388Z" fill="#fffaf2"/>
+    <path d="M430 362 L474 362" stroke="#2f6f8f" stroke-width="5"/>
+    <path d="M432 374 L472 374" stroke="#b0303a" stroke-width="3"/>
+    <ellipse cx="452" cy="352" rx="24" ry="6" fill="#3b2314"/>
+  </g>
+
+  <!-- rahat lokum -->
+  <g>
+    <rect x="236" y="384" width="20" height="16" rx="3" fill="#f2b8c6"/>
+    <rect x="384" y="384" width="20" height="16" rx="3" fill="#f2b8c6"/>
+    <rect x="236" y="384" width="20" height="4" rx="2" fill="#ffffff" opacity="0.8"/>
+    <rect x="384" y="384" width="20" height="4" rx="2" fill="#ffffff" opacity="0.8"/>
+  </g>
+
+  <!-- srce -->
+  <path d="M320 140 c-12 -18 -40 -10 -36 12 c3 16 36 34 36 34 s33 -18 36 -34 c4 -22 -24 -30 -36 -12z" fill="#e2574c" opacity="0.9"/>
+</svg>

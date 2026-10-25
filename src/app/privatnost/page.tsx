@@ -10,13 +10,16 @@ export default function Privatnost() {
         <li>Email, samo za prijavu. Niko drugi ga ne vidi.</li>
         <li>Nadimak i avatar, koje vide svi u sobama.</li>
         <li>Grad i opis, ako ih uneseš. Vidi ih samo osoba s kojom prihvatiš privatni chat.</li>
-        <li>Poruke u sobama i privatnim chatovima.</li>
+        <li>Slike u profilu. Vidi ih samo osoba s kojom prihvatiš privatni chat.</li>
+        <li>Lični oglasi, koje vide svi prijavljeni članovi, pod tvojim nadimkom.</li>
+        <li>Poruke i slike u sobama i privatnim chatovima. Iz slika brišemo skrivene podatke, npr. lokaciju.</li>
+        <li>Vrijeme zadnje aktivnosti, da bismo mogli prikazati koliko je članova online.</li>
         <li>Tvoje pristanke, s datumom kad si ih dao ili povukao.</li>
       </ul>
       <h2 className="text-lg font-semibold">Tvoja prava</h2>
       <ul className="list-disc pl-5">
         <li>Možeš u svakom trenutku povući pristanak za novosti u svom profilu.</li>
-        <li>Možeš obrisati profil jednim klikom. Tada trajno brišemo profil, poruke i pristanke.</li>
+        <li>Možeš obrisati profil jednim klikom. Tada trajno brišemo profil, poruke, slike, oglase i pristanke.</li>
         <li>Možeš tražiti kopiju svojih podataka.</li>
       </ul>
       <h2 className="text-lg font-semibold">Pravila kafića</h2>
@@ -24,6 +27,7 @@ export default function Privatnost() {
         <li>Moraš imati najmanje 18 godina.</li>
         <li>Jedan profil po osobi. Lažni profili i botovi nisu dozvoljeni.</li>
         <li>Bez uznemiravanja, prijetnji, mržnje i neželjenih eksplicitnih poruka. Takve profile brišemo.</li>
+        <li>Objavljuj samo svoje slike, i samo one za koje imaš pravo. Bez tuđih slika i bez slika maloljetnika.</li>
         <li>Nikome ne šalji novac koga nisi upoznao uživo.</li>
       </ul>
     </article>

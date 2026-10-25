@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/useSession";
 import type { Profile } from "@/lib/supabase";
@@ -15,6 +16,15 @@ export function RequireProfile({ children }: { children: (profile: Profile) => R
     if (!user) router.replace("/prijava");
     else if (!profile) router.replace("/profil");
   }, [loading, user, profile, router]);
+
+  // Javlja da je korisnik online (za brojač na naslovnoj).
+  useEffect(() => {
+    if (!profile) return;
+    const ping = () => supabase().from("profiles").update({ last_seen_at: new Date().toISOString() }).eq("id", profile.id).then();
+    ping();
+    const timer = setInterval(ping, 2 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, [profile]);
 
   if (loading || !profile) return <p className="p-6 text-stone-500">Učitavam…</p>;
   return <>{children(profile)}</>;

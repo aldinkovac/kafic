@@ -4,7 +4,7 @@ Diskretno mjesto za upoznavanje za naše ljude u BiH i dijaspori. Ljudi se dopis
 
 ## Šta radi prva verzija
 
-- Prijava linkom na email, bez lozinke i bez Facebooka.
+- Prijava emailom i lozinkom (radi s bilo kog uređaja) ili linkom na email, bez Facebooka.
 - Profil s nadimkom i avatarom. Grad i opis vidi samo osoba s kojom prihvatiš privatni chat.
 - Odvojeni pristanci (uslovi korištenja, novosti), s datumom davanja i povlačenja.
 - Javne sobe po kraju (Sarajevo, Krajina, Hercegovina, Tuzla i Zenica, Dijaspora) i temi (Muzika, Putovanja, 30+, Ozbiljne veze), s porukama uživo.
@@ -29,6 +29,15 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 6. Klikni **Deploy**.
+
+## Slanje emailova (obavezno prije lansiranja)
+
+Supabase-ov ugrađeni email šalje samo nekoliko poruka na sat, pa se brzo pojavi greška "email rate limit exceeded". Za pravi sajt treba vlastiti SMTP:
+
+1. Napravi besplatan nalog na [resend.com](https://resend.com) (3.000 emailova mjesečno besplatno) i dodaj svoju domenu.
+2. U Resendu napravi API ključ.
+3. U Supabase otvori **Authentication > Emails > SMTP Settings**, uključi "Custom SMTP" i upiši: host `smtp.resend.com`, port `465`, korisnik `resend`, lozinka = API ključ, pošiljalac npr. `kafic@tvoja-domena.ba`.
+4. U **Authentication > Rate Limits** povećaj broj emailova na sat.
 
 ## Lokalno
 

@@ -148,6 +148,7 @@ export default function ProfilPage() {
       {profile && (
         <div className="space-y-2 border-t border-stone-200 pt-5 dark:border-stone-800">
           <button type="button" className="btn-light mr-2" onClick={() => supabase().auth.signOut().then(() => router.push("/"))}>Odjavi se</button>
+          <a href="/nova-lozinka" className="btn-light mr-2 inline-block">Postavi lozinku</a>
           <button type="button" className="text-sm text-red-700 underline" onClick={deleteAccount}>Obriši profil i sve podatke</button>
         </div>
       )}

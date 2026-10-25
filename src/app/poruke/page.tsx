@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, type Profile, type PublicProfile } from "@/lib/supabase";
+import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
 
 type Request = { id: number; from_user: string; to_user: string; status: "pending" | "accepted" | "declined" };
@@ -25,7 +25,7 @@ function Inbox({ me }: { me: Profile }) {
 
   useEffect(() => {
     load();
-    const channel = sb.channel("requests")
+    const channel = sb.channel(uniqueChannel("requests"))
       .on("postgres_changes", { event: "*", schema: "public", table: "chat_requests" }, () => load())
       .subscribe();
     return () => { sb.removeChannel(channel); };

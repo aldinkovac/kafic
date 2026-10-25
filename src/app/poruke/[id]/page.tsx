@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import { supabase, type Profile } from "@/lib/supabase";
+import { supabase, uniqueChannel, type Profile } from "@/lib/supabase";
 import { signedUrls, uploadImage } from "@/lib/photos";
 import { RequireProfile } from "@/components/RequireProfile";
 
@@ -41,7 +41,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
       setMessages(list);
       addUrls([...photoPaths, ...list.map((m) => m.image_path)]);
     })();
-    const channel = sb.channel(`private-${requestId}`)
+    const channel = sb.channel(uniqueChannel(`private-${requestId}`))
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "private_messages", filter: `request_id=eq.${requestId}` },
         (payload: { new: Message }) => {
           setMessages((m) => (m.some((x) => x.id === payload.new.id) ? m : [...m, payload.new]));

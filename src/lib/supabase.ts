@@ -24,3 +24,9 @@ export type Profile = {
 };
 
 export type PublicProfile = Pick<Profile, "id" | "nickname" | "avatar" | "verified">;
+
+// Svaki realtime kanal dobija jedinstveno ime. Ako se stranica brzo otvori ponovo,
+// Supabase bi inače vratio stari, već pokrenuti kanal, a to ruši stranicu.
+export function uniqueChannel(base: string) {
+  return `${base}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}

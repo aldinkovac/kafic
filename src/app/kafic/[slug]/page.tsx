@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import { supabase, type Profile, type PublicProfile } from "@/lib/supabase";
+import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
 
 type Message = { id: number; user_id: string; body: string; created_at: string };
@@ -25,16 +25,18 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
 
   useEffect(() => {
     let channel: ReturnType<typeof sb.channel> | undefined;
+    let cancelled = false;
     (async () => {
       const { data: r } = await sb.from("rooms").select("id, name").eq("slug", slug).single();
-      if (!r) return;
+      if (!r || cancelled) return;
       setRoom(r);
       const { data } = await sb.from("room_messages").select("*").eq("room_id", r.id)
         .order("created_at", { ascending: false }).limit(100);
       const list = ((data ?? []) as Message[]).reverse();
       setMessages(list);
       loadPeople(list.map((m) => m.user_id));
-      channel = sb.channel(`room-${r.id}`)
+      if (cancelled) return;
+      channel = sb.channel(uniqueChannel(`room-${r.id}`))
         .on("postgres_changes", { event: "INSERT", schema: "public", table: "room_messages", filter: `room_id=eq.${r.id}` },
           (payload: { new: Message }) => {
             setMessages((m) => [...m, payload.new]);
@@ -42,7 +44,10 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
           })
         .subscribe();
     })();
-    return () => { if (channel) sb.removeChannel(channel); };
+    return () => {
+      cancelled = true;
+      if (channel) sb.removeChannel(channel);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 

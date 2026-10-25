@@ -19,7 +19,8 @@ export async function prepareImage(file: File): Promise<Blob> {
 
 export async function uploadImage(folder: string, file: File): Promise<string> {
   const blob = await prepareImage(file);
-  const path = `${folder}/${crypto.randomUUID()}.jpg`;
+  const id = typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const path = `${folder}/${id}.jpg`;
   const { error } = await supabase().storage.from("photos").upload(path, blob, { contentType: "image/jpeg" });
   if (error) throw error;
   return path;

@@ -121,6 +121,8 @@ function Admin({ me }: { me: Profile }) {
         })}
       </section>
 
+      <VipGrant />
+
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">Filter psovki</h2>
         <p className="text-sm text-stone-500">
@@ -140,6 +142,75 @@ function Admin({ me }: { me: Profile }) {
         </form>
       </section>
     </div>
+  );
+}
+
+type VipRow = { id: string; nickname: string; vip_until: string | null };
+
+// Kad neko uplati, admin ovdje nađe člana po nadimku i produži mu VIP.
+function VipGrant() {
+  const sb = supabase();
+  const [query, setQuery] = useState("");
+  const [found, setFound] = useState<VipRow[]>([]);
+  const [vips, setVips] = useState<VipRow[]>([]);
+  const [notice, setNotice] = useState("");
+
+  async function loadVips() {
+    const { data } = await sb.from("profiles").select("id, nickname, vip_until").gt("vip_until", new Date().toISOString()).order("vip_until");
+    setVips((data ?? []) as VipRow[]);
+  }
+
+  useEffect(() => {
+    loadVips();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function search(e: React.FormEvent) {
+    e.preventDefault();
+    const { data } = await sb.from("profiles").select("id, nickname, vip_until").ilike("nickname", `%${query.trim()}%`).limit(10);
+    setFound((data ?? []) as VipRow[]);
+  }
+
+  async function extend(row: VipRow, months: number) {
+    const start = row.vip_until && new Date(row.vip_until) > new Date() ? new Date(row.vip_until) : new Date();
+    start.setMonth(start.getMonth() + months);
+    const { error } = await sb.from("profiles").update({ vip_until: start.toISOString() }).eq("id", row.id);
+    setNotice(error ? error.message : `${row.nickname} je VIP do ${start.toLocaleDateString("bs-BA")}.`);
+    setFound((f) => f.map((x) => (x.id === row.id ? { ...x, vip_until: start.toISOString() } : x)));
+    loadVips();
+  }
+
+  async function removeVip(row: VipRow) {
+    await sb.from("profiles").update({ vip_until: null }).eq("id", row.id);
+    loadVips();
+  }
+
+  return (
+    <section className="space-y-3">
+      <h2 className="text-xl font-semibold">VIP članovi</h2>
+      <form onSubmit={search} className="flex gap-2">
+        <input className="input max-w-xs" placeholder="Nadimak člana koji je platio" value={query} onChange={(e) => setQuery(e.target.value)} />
+        <button className="btn" type="submit">Traži</button>
+      </form>
+      {found.map((r) => (
+        <div key={r.id} className="flex flex-wrap items-center gap-2 rounded-xl bg-white p-3 text-sm shadow-sm dark:bg-stone-900">
+          <span className="mr-auto font-medium">{r.nickname}{r.vip_until && new Date(r.vip_until) > new Date() ? ` · VIP do ${new Date(r.vip_until).toLocaleDateString("bs-BA")}` : ""}</span>
+          <button className="btn-light" onClick={() => extend(r, 1)}>+1 mjesec</button>
+          <button className="btn-light" onClick={() => extend(r, 12)}>+1 godina</button>
+        </div>
+      ))}
+      {notice && <p className="text-sm text-stone-600 dark:text-stone-300">{notice}</p>}
+      {vips.length > 0 && (
+        <ul className="space-y-1 text-sm">
+          {vips.map((v) => (
+            <li key={v.id}>
+              ⭐ {v.nickname}, do {new Date(v.vip_until!).toLocaleDateString("bs-BA")}{" "}
+              <button className="text-red-700 underline" onClick={() => removeVip(v)}>ukloni</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 

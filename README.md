@@ -28,7 +28,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql` i `supabase/005_moderacija.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql` i `supabase/006_vip_admin.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:
@@ -58,8 +58,7 @@ Poslije toga u meniju vidiš link **Admin**.
 
 ## Kako aktivirati VIP člana (dok nema online plaćanja)
 
-1. U Supabase otvori **Table Editor > profiles** i nađi člana po nadimku.
-2. U koloni `vip_until` upiši datum do kada je VIP, npr. `2026-12-31`, i sačuvaj.
+Na stranici **Admin**, u dijelu "VIP članovi", nađi člana po nadimku i klikni "+1 mjesec" ili "+1 godina".
 
 Cijenu i tekst o plaćanju mijenjaš u fajlu `src/lib/vip.ts`.
 

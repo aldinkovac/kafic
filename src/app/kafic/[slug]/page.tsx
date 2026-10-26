@@ -7,7 +7,8 @@ import { RequireProfile } from "@/components/RequireProfile";
 import { KafanaBar } from "@/components/KafanaBar";
 import type { Room as RoomRow } from "@/lib/rooms";
 
-type Message = { id: number; user_id: string; body: string; created_at: string };
+// Poruke bez user_id piše Konobar (bot, uvijek označen kao bot).
+type Message = { id: number; user_id: string | null; is_bot: boolean; body: string; created_at: string };
 
 function Room({ slug, me }: { slug: string; me: Profile }) {
   const sb = supabase();
@@ -20,8 +21,8 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
   const [missing, setMissing] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
 
-  async function loadPeople(ids: string[]) {
-    const missing = ids.filter((id) => !people[id]);
+  async function loadPeople(ids: (string | null)[]) {
+    const missing = ids.filter((id): id is string => !!id && !people[id]);
     if (!missing.length) return;
     const { data } = await sb.from("public_profiles").select("*").in("id", missing);
     setPeople((p) => ({ ...p, ...Object.fromEntries((data ?? []).map((u: PublicProfile) => [u.id, u])) }));
@@ -105,7 +106,19 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
       <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Još je tiho. Budi prvi koji će nešto reći.</p>}
         {messages.map((m) => {
-          const u = people[m.user_id];
+          if (m.is_bot) {
+            return (
+              <div key={m.id} className="rounded-lg bg-amber-50 px-2 py-1 text-sm dark:bg-stone-800">
+                <span className="font-semibold text-amber-800 dark:text-amber-300">☕ Konobar</span>{" "}
+                <span className="rounded bg-stone-200 px-1 text-[10px] uppercase text-stone-600 dark:bg-stone-700 dark:text-stone-300">bot</span>{" "}
+                <span>{m.body}</span>
+                {me.is_admin && (
+                  <button className="ml-2 text-xs text-red-600 underline" onClick={() => deleteMessage(m.id)}>obriši</button>
+                )}
+              </div>
+            );
+          }
+          const u = m.user_id ? people[m.user_id] : undefined;
           return (
             <div key={m.id} className="text-sm">
               <button className="font-semibold text-amber-800 hover:underline dark:text-amber-300"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SiteStats } from "@/components/SiteStats";
+import { Opening } from "@/components/Opening";
 
 const FEATURES = [
   "Komuniciraj privatnim porukama",
@@ -18,7 +19,7 @@ const STEPS = [
 const PROMISES = [
   ["🤫", "Niko iz mahale ne zna", "Bez pravog imena, bez Facebooka. Profil se vidi samo prijavljenim članovima."],
   ["🖼️", "Ti biraš ko vidi slike", "Svi članovi ili samo oni s kojima si u privatnom chatu. Iz slika brišemo skrivene podatke, npr. lokaciju."],
-  ["🙋", "Stvarni ljudi", "Nema lažnih profila ni botova. Jedan čovjek, jedan profil."],
+  ["🙋", "Stvarni ljudi", "Nema lažnih profila. Jedan čovjek, jedan profil. Jedini bot je Konobar i uvijek piše da je bot."],
   ["🗑️", "Odlaziš kad hoćeš", "Jedan klik briše profil, poruke i slike. Zauvijek."],
 ];
 
@@ -55,6 +56,8 @@ export default function Home() {
         <Image src="/hero.svg" alt="Bosanska kafa za dvoje: džezva, dva fildžana i rahat lokum kraj prozora" width={640} height={480}
           className="w-full rounded-3xl shadow-xl shadow-amber-900/10" priority />
       </section>
+
+      <Opening />
 
       <SiteStats />
 

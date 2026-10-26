@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FounderNote } from "@/components/Opening";
 import { VIP_PAYMENT_INFO, VIP_PERKS, VIP_PRICE } from "@/lib/vip";
 
 export default function VipPage() {
@@ -10,6 +11,8 @@ export default function VipPage() {
           Kafić je besplatan za sve. VIP članarina pomaže da platimo reklame i da u kafić dođe više ljudi.
         </p>
       </div>
+
+      <FounderNote />
 
       <div className="space-y-4 rounded-3xl bg-white p-6 shadow-sm dark:bg-stone-900">
         <div className="text-center text-2xl font-bold text-amber-700 dark:text-amber-400">{VIP_PRICE}</div>

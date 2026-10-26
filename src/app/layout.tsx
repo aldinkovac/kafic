@@ -13,8 +13,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="antialiased">
         <header className="border-b border-stone-200 dark:border-stone-800">
           <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-xl font-semibold">☕ Kafić</Link>
-            <div className="flex gap-4 text-sm">
+            <Link href="/" className="whitespace-nowrap text-lg font-semibold sm:text-xl">☕ Kafić</Link>
+            <div className="flex gap-2.5 text-[13px] sm:gap-4 sm:text-sm">
+              <Link href="/clanovi">Članovi</Link>
               <Link href="/kafic">Sobe</Link>
               <Link href="/oglasi">Oglasi</Link>
               <Link href="/poruke">Poruke</Link>

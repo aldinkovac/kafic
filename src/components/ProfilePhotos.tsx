@@ -54,7 +54,7 @@ export function ProfilePhotos({ userId }: { userId: string }) {
     <div className="space-y-2">
       <span className="text-sm font-medium">Tvoje slike</span>
       <p className="text-xs text-stone-500">
-        Slike ne vidi niko u sobama. Vidi ih samo osoba s kojom prihvatiš privatni chat.
+        Ko vidi slike biraš ispod, u dijelu &quot;Ko vidi moj profil i slike&quot;. Prva slika je glavna.
       </p>
       <div className="grid grid-cols-3 gap-2">
         {photos.map((p) => (

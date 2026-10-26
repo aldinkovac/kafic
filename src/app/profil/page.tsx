@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { supabase, GENDER_LABEL, type Gender, type Profile } from "@/lib/supabase";
 import { useSession } from "@/lib/useSession";
 import { ProfilePhotos } from "@/components/ProfilePhotos";
 
@@ -16,6 +16,12 @@ export default function ProfilPage() {
   const [avatar, setAvatar] = useState(AVATARS[0]);
   const [city, setCity] = useState("");
   const [bio, setBio] = useState("");
+  const [gender, setGender] = useState<Gender | "">("");
+  const [birthYear, setBirthYear] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [visibility, setVisibility] = useState<Profile["visibility"]>("members");
   const [terms, setTerms] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [error, setError] = useState("");
@@ -28,6 +34,12 @@ export default function ProfilPage() {
       setAvatar(profile.avatar);
       setCity(profile.city ?? "");
       setBio(profile.bio ?? "");
+      setGender(profile.gender ?? "");
+      setBirthYear(profile.birth_year?.toString() ?? "");
+      setHeight(profile.height_cm?.toString() ?? "");
+      setWeight(profile.weight_kg?.toString() ?? "");
+      setInstagram(profile.instagram ?? "");
+      setVisibility(profile.visibility ?? "members");
     }
   }, [loading, user, profile, router]);
 
@@ -54,12 +66,31 @@ export default function ProfilPage() {
       return;
     }
     const sb = supabase();
-    const row = { id: user!.id, nickname: nickname.trim(), avatar, city: city.trim() || null, bio: bio.trim() || null };
+    const num = (v: string) => (v.trim() ? Number(v) : null);
+    const row = {
+      id: user!.id,
+      nickname: nickname.trim(),
+      avatar,
+      city: city.trim() || null,
+      bio: bio.trim() || null,
+      gender: gender || null,
+      birth_year: num(birthYear),
+      height_cm: num(height),
+      weight_kg: num(weight),
+      instagram: instagram.trim().replace(/^@/, "").replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/\/$/, "") || null,
+      visibility,
+    };
     const { data, error } = profile
       ? await sb.from("profiles").update(row).eq("id", user!.id).select().single()
       : await sb.from("profiles").insert(row).select().single();
     if (error) {
-      setError(error.code === "23505" ? "Taj nadimak je zauzet, izaberi drugi." : error.message);
+      const msg = error.code === "23505" ? "Taj nadimak je zauzet, izaberi drugi."
+        : /birth_year/.test(error.message) ? "Moraš imati najmanje 18 godina."
+        : /height_cm/.test(error.message) ? "Visina mora biti između 120 i 230 cm."
+        : /weight_kg/.test(error.message) ? "Težina mora biti između 35 i 250 kg."
+        : /instagram/.test(error.message) ? "Instagram ime može imati samo slova, brojeve, tačku i donju crtu."
+        : error.message;
+      setError(msg);
       return;
     }
     const now = new Date().toISOString();
@@ -92,7 +123,7 @@ export default function ProfilPage() {
     <form onSubmit={save} className="max-w-md space-y-5">
       <h1 className="text-2xl font-semibold">{profile ? "Tvoj profil" : "Napravi profil"}</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">
-        U javnim sobama drugi vide samo nadimak i avatar. Grad i opis vidi samo neko s kim prihvatiš privatni chat.
+        U sobama se vidi nadimak i avatar. Ispod biraš da li tvoj profil i slike vide svi članovi ili samo oni s kojima prihvatiš privatni chat.
       </p>
 
       <label className="block space-y-1">
@@ -119,15 +150,56 @@ export default function ProfilPage() {
         <p className="text-xs text-stone-500">Slike možeš dodati čim napraviš profil.</p>
       )}
 
+      <div className="grid grid-cols-2 gap-3">
+        <label className="block space-y-1">
+          <span className="text-sm font-medium">Spol</span>
+          <select className="input" value={gender} onChange={(e) => setGender(e.target.value as Gender | "")}>
+            <option value="">Ne želim reći</option>
+            {Object.entries(GENDER_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-sm font-medium">Godina rođenja</span>
+          <input className="input" type="number" inputMode="numeric" min={1920} max={new Date().getFullYear() - 18}
+            placeholder="npr. 1992" value={birthYear} onChange={(e) => setBirthYear(e.target.value)} />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-sm font-medium">Visina (cm)</span>
+          <input className="input" type="number" inputMode="numeric" min={120} max={230} value={height} onChange={(e) => setHeight(e.target.value)} />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-sm font-medium">Težina (kg)</span>
+          <input className="input" type="number" inputMode="numeric" min={35} max={250} value={weight} onChange={(e) => setWeight(e.target.value)} />
+        </label>
+      </div>
+
       <label className="block space-y-1">
-        <span className="text-sm font-medium">Grad (neobavezno)</span>
-        <input className="input" maxLength={60} value={city} onChange={(e) => setCity(e.target.value)} />
+        <span className="text-sm font-medium">Odakle si</span>
+        <input className="input" maxLength={60} placeholder="npr. Tuzla ili Beč" value={city} onChange={(e) => setCity(e.target.value)} />
+      </label>
+
+      <label className="block space-y-1">
+        <span className="text-sm font-medium">Instagram (neobavezno)</span>
+        <input className="input" maxLength={60} placeholder="@tvoje.ime" autoCapitalize="none" value={instagram} onChange={(e) => setInstagram(e.target.value)} />
+        <span className="text-xs text-stone-500">Pazi: Instagram otkriva ko si. Ostavi prazno ako želiš ostati anoniman.</span>
       </label>
 
       <label className="block space-y-1">
         <span className="text-sm font-medium">Nešto o tebi (neobavezno)</span>
         <textarea className="input" rows={3} maxLength={300} value={bio} onChange={(e) => setBio(e.target.value)} />
       </label>
+
+      <fieldset className="space-y-2 rounded-lg border border-stone-200 p-3 text-sm dark:border-stone-800">
+        <legend className="px-1 font-medium">Ko vidi moj profil i slike</legend>
+        <label className="flex gap-2">
+          <input type="radio" name="visibility" checked={visibility === "members"} onChange={() => setVisibility("members")} />
+          <span>Svi prijavljeni članovi</span>
+        </label>
+        <label className="flex gap-2">
+          <input type="radio" name="visibility" checked={visibility === "partners"} onChange={() => setVisibility("partners")} />
+          <span>Samo osobe s kojima prihvatim privatni chat (ostali vide samo nadimak)</span>
+        </label>
+      </fieldset>
 
       <fieldset className="space-y-2 rounded-lg border border-stone-200 p-3 text-sm dark:border-stone-800">
         <legend className="px-1 font-medium">Pristanci</legend>

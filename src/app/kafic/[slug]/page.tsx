@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
 
@@ -110,6 +111,7 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
       {selected && (
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-amber-50 p-3 text-sm dark:bg-stone-800">
           <span className="mr-auto font-medium">{selected.avatar} {selected.nickname}</span>
+          <Link className="btn-light" href={`/clan/${selected.id}`}>Pogledaj profil</Link>
           <button className="btn" onClick={() => requestChat(selected)}>Pozovi na privatni chat</button>
           <button className="btn-light" onClick={() => block(selected)}>Blokiraj</button>
           <button className="text-red-700 underline" onClick={() => report(selected)}>Prijavi</button>

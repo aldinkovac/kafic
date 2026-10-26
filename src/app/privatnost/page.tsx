@@ -9,8 +9,9 @@ export default function Privatnost() {
       <ul className="list-disc pl-5">
         <li>Email, samo za prijavu. Niko drugi ga ne vidi.</li>
         <li>Nadimak i avatar, koje vide svi u sobama.</li>
-        <li>Grad i opis, ako ih uneseš. Vidi ih samo osoba s kojom prihvatiš privatni chat.</li>
-        <li>Slike u profilu. Vidi ih samo osoba s kojom prihvatiš privatni chat.</li>
+        <li>Podaci o sebi koje sam uneseš: spol, godina rođenja, visina, težina, mjesto, Instagram i opis.</li>
+        <li>Slike u profilu.</li>
+        <li>Ti biraš ko vidi tvoj profil i slike: svi prijavljeni članovi ili samo osobe s kojima prihvatiš privatni chat. Neprijavljeni posjetioci ne vide ništa.</li>
         <li>Lični oglasi, koje vide svi prijavljeni članovi, pod tvojim nadimkom.</li>
         <li>Poruke i slike u sobama i privatnim chatovima. Iz slika brišemo skrivene podatke, npr. lokaciju.</li>
         <li>Vrijeme zadnje aktivnosti, da bismo mogli prikazati koliko je članova online.</li>

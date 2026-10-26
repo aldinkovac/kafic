@@ -12,12 +12,12 @@ const FEATURES = [
 const STEPS = [
   ["1", "Sjedni za sto", "Izaberi sobu po svom kraju ili temi: Sarajevo, Krajina, Dijaspora, Muzika, 30+…"],
   ["2", "Opusti se u razgovoru", "Dopisuj se s ljudima u sobi. Svi vide samo tvoj nadimak i avatar."],
-  ["3", "Pozovi na kafu udvoje", "Kad ti se neko svidi, pošalji zahtjev za privatni chat. Tek tad se vide slike."],
+  ["3", "Pozovi na kafu udvoje", "Pogledaj profile i slike članova, a kad ti se neko svidi, pošalji zahtjev za privatni chat."],
 ];
 
 const PROMISES = [
-  ["🤫", "Niko iz mahale ne zna", "Bez pravog imena, bez Facebooka. U sobama se vidi samo nadimak."],
-  ["🖼️", "Slike samo za odabrane", "Tvoje slike vidi samo osoba s kojom prihvatiš privatni chat. Brišemo i skrivene podatke iz slike, npr. lokaciju."],
+  ["🤫", "Niko iz mahale ne zna", "Bez pravog imena, bez Facebooka. Profil se vidi samo prijavljenim članovima."],
+  ["🖼️", "Ti biraš ko vidi slike", "Svi članovi ili samo oni s kojima si u privatnom chatu. Iz slika brišemo skrivene podatke, npr. lokaciju."],
   ["🙋", "Stvarni ljudi", "Nema lažnih profila ni botova. Jedan čovjek, jedan profil."],
   ["🗑️", "Odlaziš kad hoćeš", "Jedan klik briše profil, poruke i slike. Zauvijek."],
 ];

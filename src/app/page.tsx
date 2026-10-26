@@ -71,6 +71,17 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="grid items-center gap-6 rounded-3xl bg-amber-100 p-8 dark:bg-amber-950/40 md:grid-cols-[1fr_auto]">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-bold">🍻 Otvori svoju kafanu</h2>
+          <p className="text-stone-700 dark:text-stone-300">
+            Daj joj ime, pozovi svoju raju linkom preko WhatsAppa i družite se kao u staroj kafani.
+            Kafana može biti zatvorena samo za vaše ili otvorena za sve.
+          </p>
+        </div>
+        <Link href="/kafic" className="btn text-center text-lg">Otvori kafanu</Link>
+      </section>
+
       <section className="space-y-4">
         <h2 className="text-3xl font-bold">Stolovi u kafiću</h2>
         <div className="flex flex-wrap gap-2">

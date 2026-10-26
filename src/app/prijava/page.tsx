@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { supabase, takeRememberedPath } from "@/lib/supabase";
 
 type Mode = "login" | "register" | "link" | "forgot";
 
@@ -43,7 +43,7 @@ export default function Prijava() {
 
     if (mode === "login") {
       result = await auth.signInWithPassword({ email, password });
-      if (!result.error) router.push("/kafic");
+      if (!result.error) router.push(takeRememberedPath("/kafic"));
     } else if (mode === "register") {
       const r = await auth.signUp({ email, password, options: { emailRedirectTo: `${origin}/kafic` } });
       result = r;

@@ -20,7 +20,8 @@ function Members({ me }: { me: Profile }) {
     (async () => {
       const { data } = await supabase().from("public_profiles").select("*").neq("id", me.id)
         .order("online", { ascending: false }).order("created_at", { ascending: false }).limit(300);
-      const list = (data ?? []) as MemberProfile[];
+      // VIP članovi prvi.
+      const list = ((data ?? []) as MemberProfile[]).sort((a, b) => Number(b.vip) - Number(a.vip));
       setMembers(list);
       setLoaded(true);
       setPhotos(await mainPhotos(list.filter((m) => m.visible).map((m) => m.id)));
@@ -60,7 +61,7 @@ function Members({ me }: { me: Profile }) {
         {shown.map((m) => {
           const age = ageFromYear(m.birth_year);
           return (
-            <Link key={m.id} href={`/clan/${m.id}`} className="overflow-hidden rounded-2xl bg-white shadow-sm hover:ring-2 hover:ring-amber-700 dark:bg-stone-900">
+            <Link key={m.id} href={`/clan/${m.id}`} className={`overflow-hidden rounded-2xl bg-white shadow-sm hover:ring-2 hover:ring-amber-700 dark:bg-stone-900 ${m.vip ? "ring-2 ring-amber-400" : ""}`}>
               <div className="relative flex aspect-square items-center justify-center bg-amber-100 text-6xl dark:bg-stone-800">
                 {photos[m.id]
                   // eslint-disable-next-line @next/next/no-img-element
@@ -70,7 +71,7 @@ function Members({ me }: { me: Profile }) {
                 {!m.visible && <span className="absolute bottom-2 left-2 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">🔒 Privatan profil</span>}
               </div>
               <div className="p-3">
-                <div className="truncate font-semibold">{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</div>
+                <div className="truncate font-semibold">{m.vip ? "⭐ " : ""}{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</div>
                 <div className="truncate text-xs text-stone-500">{m.city ?? " "}</div>
               </div>
             </Link>

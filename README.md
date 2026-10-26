@@ -16,6 +16,8 @@ Diskretno mjesto za upoznavanje za naše ljude u BiH i dijaspori. Ljudi se dopis
 - Korisnik bira ko vidi njegov profil i slike: svi članovi ili samo osobe s kojima je prihvatio privatni chat.
 - Slanje slika u privatnom chatu. Slike se smanjuju i iz njih se brišu skriveni podaci (npr. lokacija).
 - Brojači na naslovnoj (članovi, slike, oglasi, online). Prikazuju se tek kad ima 50 članova.
+- Kafane: svaki član može otvoriti svoju kafanu (VIP do 5), zatvorenu ili otvorenu, i pozvati raju linkom ili preko WhatsAppa.
+- VIP članstvo: zvjezdica, prvo mjesto među članovima, više kafana. Stranica `/vip`.
 - Blokiranje i prijava korisnika.
 - Brisanje profila i svih podataka jednim klikom.
 
@@ -24,7 +26,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql` i `supabase/003_javni_profili.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql` i `supabase/004_kafane_vip.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:
@@ -40,6 +42,13 @@ Supabase-ov ugrađeni email šalje samo nekoliko poruka na sat, pa se brzo pojav
 2. U Resendu napravi API ključ.
 3. U Supabase otvori **Authentication > Emails > SMTP Settings**, uključi "Custom SMTP" i upiši: host `smtp.resend.com`, port `465`, korisnik `resend`, lozinka = API ključ, pošiljalac npr. `kafic@tvoja-domena.ba`.
 4. U **Authentication > Rate Limits** povećaj broj emailova na sat.
+
+## Kako aktivirati VIP člana (dok nema online plaćanja)
+
+1. U Supabase otvori **Table Editor > profiles** i nađi člana po nadimku.
+2. U koloni `vip_until` upiši datum do kada je VIP, npr. `2026-12-31`, i sačuvaj.
+
+Cijenu i tekst o plaćanju mijenjaš u fajlu `src/lib/vip.ts`.
 
 ## Lokalno
 

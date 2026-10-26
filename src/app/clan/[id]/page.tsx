@@ -77,7 +77,7 @@ function Member({ id, me }: { id: string; me: Profile }) {
             : m.avatar}
         </div>
         <div>
-          <h1 className="text-2xl font-semibold">{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</h1>
+          <h1 className="text-2xl font-semibold">{m.vip ? "⭐ " : ""}{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</h1>
           <p className="text-sm text-stone-500">{m.online ? "🟢 Online" : "Offline"}{m.city ? ` · ${m.city}` : ""}</p>
         </div>
       </div>

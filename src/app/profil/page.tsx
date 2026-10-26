@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { supabase, GENDER_LABEL, type Gender, type Profile } from "@/lib/supabase";
+import { supabase, takeRememberedPath, isVip, GENDER_LABEL, type Gender, type Profile } from "@/lib/supabase";
 import { useSession } from "@/lib/useSession";
 import { ProfilePhotos } from "@/components/ProfilePhotos";
 
@@ -100,7 +100,7 @@ export default function ProfilPage() {
     ]);
     setProfile(data);
     setSaved(true);
-    if (!profile) router.push("/kafic");
+    if (!profile) router.push(takeRememberedPath("/kafic"));
   }
 
   async function deleteAccount() {
@@ -121,7 +121,12 @@ export default function ProfilPage() {
 
   return (
     <form onSubmit={save} className="max-w-md space-y-5">
-      <h1 className="text-2xl font-semibold">{profile ? "Tvoj profil" : "Napravi profil"}</h1>
+      <div className="flex flex-wrap items-center gap-3">
+        <h1 className="text-2xl font-semibold">{profile ? "Tvoj profil" : "Napravi profil"}</h1>
+        {profile && (isVip(profile)
+          ? <span className="rounded-full bg-amber-400 px-3 py-1 text-sm font-semibold text-stone-900">⭐ VIP do {new Date(profile.vip_until!).toLocaleDateString("bs-BA")}</span>
+          : <Link href="/vip" className="text-sm text-amber-800 underline dark:text-amber-300">Postani VIP ⭐</Link>)}
+      </div>
       <p className="text-sm text-stone-600 dark:text-stone-400">
         U sobama se vidi nadimak i avatar. Ispod biraš da li tvoj profil i slike vide svi članovi ili samo oni s kojima prihvatiš privatni chat.
       </p>

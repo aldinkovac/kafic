@@ -27,7 +27,26 @@ export type Profile = {
   weight_kg: number | null;
   instagram: string | null;
   visibility: "members" | "partners";
+  vip_until: string | null;
 };
+
+export function isVip(p: { vip_until?: string | null }) {
+  return !!p.vip_until && new Date(p.vip_until) > new Date();
+}
+
+// Kamo vratiti korisnika nakon prijave (npr. na pozivnicu za kafanu).
+const AFTER_LOGIN = "kafic:poslije-prijave";
+export function rememberPath(path: string) {
+  try { sessionStorage.setItem(AFTER_LOGIN, path); } catch {}
+}
+export function takeRememberedPath(fallback: string) {
+  try {
+    const path = sessionStorage.getItem(AFTER_LOGIN);
+    sessionStorage.removeItem(AFTER_LOGIN);
+    if (path && path.startsWith("/")) return path;
+  } catch {}
+  return fallback;
+}
 
 export type Gender = "musko" | "zensko";
 export const GENDER_LABEL: Record<Gender, string> = { musko: "Muško", zensko: "Žensko" };
@@ -40,6 +59,7 @@ export type MemberProfile = PublicProfile &
     visible: boolean;
     online: boolean;
     created_at: string;
+    vip: boolean;
   };
 
 export function ageFromYear(year: number | null) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, rememberPath } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/useSession";
 import type { Profile } from "@/lib/supabase";
@@ -13,6 +13,7 @@ export function RequireProfile({ children }: { children: (profile: Profile) => R
 
   useEffect(() => {
     if (loading) return;
+    if (!user || !profile) rememberPath(window.location.pathname);
     if (!user) router.replace("/prijava");
     else if (!profile) router.replace("/profil");
   }, [loading, user, profile, router]);

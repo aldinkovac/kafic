@@ -4,17 +4,20 @@ import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
+import { KafanaBar } from "@/components/KafanaBar";
+import type { Room as RoomRow } from "@/lib/rooms";
 
 type Message = { id: number; user_id: string; body: string; created_at: string };
 
 function Room({ slug, me }: { slug: string; me: Profile }) {
   const sb = supabase();
-  const [room, setRoom] = useState<{ id: number; name: string } | null>(null);
+  const [room, setRoom] = useState<RoomRow | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [people, setPeople] = useState<Record<string, PublicProfile>>({});
   const [text, setText] = useState("");
   const [selected, setSelected] = useState<PublicProfile | null>(null);
   const [notice, setNotice] = useState("");
+  const [missing, setMissing] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
 
   async function loadPeople(ids: string[]) {
@@ -28,8 +31,9 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     let channel: ReturnType<typeof sb.channel> | undefined;
     let cancelled = false;
     (async () => {
-      const { data: r } = await sb.from("rooms").select("id, name").eq("slug", slug).single();
-      if (!r || cancelled) return;
+      const { data: r } = await sb.from("rooms").select("*").eq("slug", slug).maybeSingle();
+      if (cancelled) return;
+      if (!r) return setMissing(true);
       setRoom(r);
       const { data } = await sb.from("room_messages").select("*").eq("room_id", r.id)
         .order("created_at", { ascending: false }).limit(100);
@@ -86,11 +90,13 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     setSelected(null);
   }
 
+  if (missing) return <p className="text-stone-500">Ova kafana ne postoji ili je zatvorena. U zatvorenu kafanu se ulazi samo preko pozivnice.</p>;
   if (!room) return <p className="text-stone-500">Učitavam sobu…</p>;
 
   return (
     <div className="flex h-[75vh] flex-col">
-      <h1 className="mb-3 text-2xl font-semibold">{room.name}</h1>
+      <h1 className="mb-1 text-2xl font-semibold">{room.name}</h1>
+      {room.category === "kafana" && <KafanaBar room={room} me={me} onChange={setRoom} />}
       <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Još je tiho. Budi prvi koji će nešto reći.</p>}
         {messages.map((m) => {

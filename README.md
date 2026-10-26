@@ -19,6 +19,8 @@ Diskretno mjesto za upoznavanje za naše ljude u BiH i dijaspori. Ljudi se dopis
 - Kafane: svaki član može otvoriti svoju kafanu (VIP do 5), zatvorenu ili otvorenu, i pozvati raju linkom ili preko WhatsAppa.
 - VIP članstvo: zvjezdica, prvo mjesto među članovima, više kafana. Stranica `/vip`.
 - Blokiranje i prijava korisnika.
+- Admin stranica `/admin`: prijave, zabrana pisanja (1 dan, 7 dana, trajno), brisanje poruka i oglasa, lista psovki.
+- Filter psovki u sobama i oglasima.
 - Brisanje profila i svih podataka jednim klikom.
 
 Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe privatne poruke ni sam sebi dati oznaku "verifikovan".
@@ -26,7 +28,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql` i `supabase/004_kafane_vip.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql` i `supabase/005_moderacija.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:
@@ -42,6 +44,17 @@ Supabase-ov ugrađeni email šalje samo nekoliko poruka na sat, pa se brzo pojav
 2. U Resendu napravi API ključ.
 3. U Supabase otvori **Authentication > Emails > SMTP Settings**, uključi "Custom SMTP" i upiši: host `smtp.resend.com`, port `465`, korisnik `resend`, lozinka = API ključ, pošiljalac npr. `kafic@tvoja-domena.ba`.
 4. U **Authentication > Rate Limits** povećaj broj emailova na sat.
+
+## Kako postati admin
+
+U Supabase SQL Editoru pokreni (sa svojim emailom):
+
+```sql
+update public.profiles set is_admin = true
+where id = (select id from auth.users where email = 'tvoj@email.com');
+```
+
+Poslije toga u meniju vidiš link **Admin**.
 
 ## Kako aktivirati VIP člana (dok nema online plaćanja)
 
@@ -61,5 +74,4 @@ npm run dev
 ## Sljedeće
 
 - Selfie verifikacija (Didit, 500 besplatnih provjera mjesečno).
-- Automatski filter psovki i spama u sobama.
 - Mobilna aplikacija (skrivanje od kontakata, blokada snimaka ekrana).

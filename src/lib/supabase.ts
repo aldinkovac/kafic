@@ -28,6 +28,8 @@ export type Profile = {
   instagram: string | null;
   visibility: "members" | "partners";
   vip_until: string | null;
+  is_admin: boolean;
+  banned_until: string | null;
 };
 
 export function isVip(p: { vip_until?: string | null }) {

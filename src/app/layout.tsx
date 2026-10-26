@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { AdminLink } from "@/components/AdminLink";
 
 export const metadata: Metadata = {
   title: "Kafić",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/oglasi">Oglasi</Link>
               <Link href="/poruke">Poruke</Link>
               <Link href="/profil">Profil</Link>
+              <AdminLink />
             </div>
           </nav>
         </header>

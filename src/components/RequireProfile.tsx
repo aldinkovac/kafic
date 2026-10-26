@@ -28,5 +28,15 @@ export function RequireProfile({ children }: { children: (profile: Profile) => R
   }, [profile]);
 
   if (loading || !profile) return <p className="p-6 text-stone-500">Učitavam…</p>;
-  return <>{children(profile)}</>;
+  const banned = profile.banned_until && new Date(profile.banned_until) > new Date();
+  return (
+    <>
+      {banned && (
+        <p className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950/40 dark:text-red-200">
+          Zbog prijava ti je zabranjeno pisanje do {new Date(profile.banned_until!).toLocaleString("bs-BA")}. Možeš čitati, ali ne i pisati.
+        </p>
+      )}
+      {children(profile)}
+    </>
+  );
 }

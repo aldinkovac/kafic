@@ -67,6 +67,11 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     if (error) setNotice(error.message);
   }
 
+  async function deleteMessage(id: number) {
+    await sb.from("room_messages").delete().eq("id", id);
+    setMessages((list) => list.filter((m) => m.id !== id));
+  }
+
   async function requestChat(to: PublicProfile) {
     const { error } = await sb.from("chat_requests").insert({ from_user: me.id, to_user: to.id });
     setNotice(error
@@ -108,6 +113,9 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
                 {u ? `${u.avatar} ${u.nickname}${u.verified ? " ✓" : ""}` : "…"}
               </button>{" "}
               <span>{m.body}</span>
+              {me.is_admin && (
+                <button className="ml-2 text-xs text-red-600 underline" onClick={() => deleteMessage(m.id)}>obriši</button>
+              )}
             </div>
           );
         })}

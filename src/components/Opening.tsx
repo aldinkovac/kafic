@@ -71,7 +71,7 @@ export function Opening() {
 // Kratka napomena za stranicu VIP dok traje ponuda za osnivače.
 export function FounderNote() {
   const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(founderOfferOpen()), []);
+  useEffect(() => { setOpen(founderOfferOpen()); }, []);
   if (!open) return null;
   return (
     <div className="rounded-2xl bg-amber-700 p-4 text-center text-amber-50">

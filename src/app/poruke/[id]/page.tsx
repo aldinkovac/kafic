@@ -64,7 +64,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestId]);
 
-  useEffect(() => bottom.current?.scrollIntoView({ behavior: "smooth" }), [messages.length, urls]);
+  useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [messages.length, urls]);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();

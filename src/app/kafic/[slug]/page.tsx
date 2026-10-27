@@ -57,7 +57,7 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  useEffect(() => bottom.current?.scrollIntoView({ behavior: "smooth" }), [messages.length]);
+  useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [messages.length]);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();

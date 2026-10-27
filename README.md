@@ -28,7 +28,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql` i `supabase/007_konobar_osnivaci.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql`, `supabase/007_konobar_osnivaci.sql` i `supabase/008_neprocitano_obavjestenja.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:
@@ -80,3 +80,13 @@ npm run dev
 `007_konobar_osnivaci.sql` dodaje Konobara: bota koji je uvijek jasno označen kao bot. On pozdravi svakog ko prvi put napiše nešto u sobi, a uveče (17 do 24h), kad je neko online, baci temu u sobu koja je tiha više od sat i po. Rečenice se mijenjaju u tabeli `konobar_lines` (Table Editor). Teme se šalju preko dodatka **pg_cron**; ako SQL javi grešku kod zadnje dvije linije, uključi ga u **Database > Extensions** (potraži "pg_cron") i pokreni samo te dvije linije ponovo.
 
 Isti fajl daje doživotni VIP svima koji već imaju profil i svakom ko napravi profil do 30.11.2026. Datum odbrojavanja na naslovnoj mijenjaš u `src/lib/event.ts`.
+
+## Obavještenja i aplikacija na telefonu
+
+Crveni broj pored "Poruke" radi čim se pokrene `008_neprocitano_obavjestenja.sql`.
+
+Za obavještenja kad je sajt zatvoren, u **Vercel > projekat > Settings > Environment Variables** dodaj
+`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` i `SUPABASE_SERVICE_ROLE_KEY` (vidi `.env.example`), pa uradi **Redeploy**.
+Korisnik ih uključi na stranici Poruke ili Profil. Na Androidu i računaru rade odmah; na iPhoneu tek kad se Kafić doda na početni ekran
+(Dijeli > Dodaj na početni ekran). U obavještenju se nikad ne vidi ime ni tekst poruke.
+Ako sajt pređe na drugu adresu, promijeni adresu u funkciji `notify_push` u SQL-u.

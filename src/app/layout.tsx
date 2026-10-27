@@ -1,17 +1,24 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { AdminLink } from "@/components/AdminLink";
+import { AppSetup } from "@/components/AppSetup";
+import { MessagesLink } from "@/components/MessagesLink";
 
 export const metadata: Metadata = {
   title: "Kafić",
   description: "Diskretno mjesto za upoznavanje za naše ljude u BiH i dijaspori.",
+  appleWebApp: { capable: true, title: "Kafić", statusBarStyle: "default" },
+  icons: { apple: "/apple-touch-icon.png" },
 };
+
+export const viewport: Viewport = { themeColor: "#b45309" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="bs">
       <body className="antialiased">
+        <AppSetup />
         <header className="border-b border-stone-200 dark:border-stone-800">
           <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
             <Link href="/" className="whitespace-nowrap text-lg font-semibold sm:text-xl">☕ Kafić</Link>
@@ -19,7 +26,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/clanovi">Članovi</Link>
               <Link href="/kafic">Sobe</Link>
               <Link href="/oglasi">Oglasi</Link>
-              <Link href="/poruke">Poruke</Link>
+              <MessagesLink />
               <Link href="/profil">Profil</Link>
               <AdminLink />
             </div>

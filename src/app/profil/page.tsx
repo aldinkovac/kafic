@@ -6,6 +6,8 @@ import Link from "next/link";
 import { supabase, takeRememberedPath, isVip, GENDER_LABEL, type Gender, type Profile } from "@/lib/supabase";
 import { useSession } from "@/lib/useSession";
 import { ProfilePhotos } from "@/components/ProfilePhotos";
+import { PushSetup } from "@/components/PushSetup";
+import { stopPush } from "@/lib/push";
 
 const AVATARS = ["☕", "🌹", "🌙", "🎸", "📚", "⚽", "🏔️", "🌊", "🦉", "🍀", "🎨", "✈️"];
 
@@ -115,6 +117,7 @@ export default function ProfilPage() {
     if (paths.length) await sb.storage.from("photos").remove(paths);
     const { error } = await sb.rpc("delete_my_account");
     if (error) return setError(error.message);
+    await stopPush();
     await sb.auth.signOut();
     router.push("/");
   }
@@ -222,9 +225,11 @@ export default function ProfilPage() {
       {saved && <p className="text-sm text-green-700">Sačuvano.</p>}
       <button className="btn" type="submit">{profile ? "Sačuvaj" : "Uđi u kafić"}</button>
 
+      {profile && <PushSetup userId={profile.id} />}
+
       {profile && (
         <div className="space-y-2 border-t border-stone-200 pt-5 dark:border-stone-800">
-          <button type="button" className="btn-light mr-2" onClick={() => supabase().auth.signOut().then(() => router.push("/"))}>Odjavi se</button>
+          <button type="button" className="btn-light mr-2" onClick={() => stopPush().then(() => supabase().auth.signOut()).then(() => router.push("/"))}>Odjavi se</button>
           <a href="/nova-lozinka" className="btn-light mr-2 inline-block">Postavi lozinku</a>
           <button type="button" className="text-sm text-red-700 underline" onClick={deleteAccount}>Obriši profil i sve podatke</button>
         </div>

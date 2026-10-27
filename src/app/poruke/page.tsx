@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
+import { PushSetup } from "@/components/PushSetup";
 
 type Request = { id: number; from_user: string; to_user: string; status: "pending" | "accepted" | "declined" };
 
@@ -11,11 +12,14 @@ function Inbox({ me }: { me: Profile }) {
   const sb = supabase();
   const [requests, setRequests] = useState<Request[]>([]);
   const [people, setPeople] = useState<Record<string, PublicProfile>>({});
+  const [unread, setUnread] = useState<Record<number, number>>({});
 
   async function load() {
     const { data } = await sb.from("chat_requests").select("*").order("created_at", { ascending: false });
     const list = (data ?? []) as Request[];
     setRequests(list);
+    const { data: counts } = await sb.rpc("unread_counts");
+    setUnread(Object.fromEntries(((counts ?? []) as { request_id: number; n: number }[]).map((c) => [c.request_id, c.n])));
     const ids = [...new Set(list.map((r) => (r.from_user === me.id ? r.to_user : r.from_user)))];
     if (ids.length) {
       const { data: ps } = await sb.from("public_profiles").select("*").in("id", ids);
@@ -27,6 +31,7 @@ function Inbox({ me }: { me: Profile }) {
     load();
     const channel = sb.channel(uniqueChannel("requests"))
       .on("postgres_changes", { event: "*", schema: "public", table: "chat_requests" }, () => load())
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "private_messages" }, () => load())
       .subscribe();
     return () => { sb.removeChannel(channel); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,6 +51,7 @@ function Inbox({ me }: { me: Profile }) {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Poruke</h1>
+      <PushSetup userId={me.id} />
 
       <section className="space-y-2">
         <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">Zahtjevi za tebe</h2>
@@ -63,8 +69,11 @@ function Inbox({ me }: { me: Profile }) {
         <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">Privatni chatovi</h2>
         {chats.length === 0 && <p className="text-sm text-stone-500">Još nemaš privatnih chatova. Pozovi nekog iz sobe.</p>}
         {chats.map((r) => (
-          <Link key={r.id} href={`/poruke/${r.id}`} className="block rounded-xl border border-stone-200 p-3 hover:border-amber-700 dark:border-stone-800">
-            {name(other(r))}
+          <Link key={r.id} href={`/poruke/${r.id}`} className="flex items-center rounded-xl border border-stone-200 p-3 hover:border-amber-700 dark:border-stone-800">
+            <span className={`mr-auto ${unread[r.id] ? "font-semibold" : ""}`}>{name(other(r))}</span>
+            {!!unread[r.id] && (
+              <span className="rounded-full bg-red-600 px-2 text-xs font-bold leading-5 text-white">{unread[r.id]} nova</span>
+            )}
           </Link>
         ))}
       </section>

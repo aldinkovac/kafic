@@ -19,6 +19,11 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
   const [zoom, setZoom] = useState<string | null>(null);
   const bottom = useRef<HTMLDivElement>(null);
 
+  // Označi chat kao pročitan, da nestane crveni broj u meniju.
+  function markRead() {
+    sb.rpc("mark_read", { req: requestId }).then(() => window.dispatchEvent(new Event("kafic:read")));
+  }
+
   async function addUrls(paths: (string | null)[]) {
     const fresh = await signedUrls(paths.filter((p): p is string => !!p));
     setUrls((u) => ({ ...u, ...fresh }));
@@ -39,16 +44,23 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
       setPartnerPhotos(photoPaths);
       const list = (data ?? []) as Message[];
       setMessages(list);
+      markRead();
       addUrls([...photoPaths, ...list.map((m) => m.image_path)]);
     })();
     const channel = sb.channel(uniqueChannel(`private-${requestId}`))
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "private_messages", filter: `request_id=eq.${requestId}` },
         (payload: { new: Message }) => {
           setMessages((m) => (m.some((x) => x.id === payload.new.id) ? m : [...m, payload.new]));
+          if (payload.new.sender !== me.id && document.visibilityState === "visible") markRead();
           addUrls([payload.new.image_path]);
         })
       .subscribe();
-    return () => { sb.removeChannel(channel); };
+    const onVisible = () => document.visibilityState === "visible" && markRead();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      sb.removeChannel(channel);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestId]);
 

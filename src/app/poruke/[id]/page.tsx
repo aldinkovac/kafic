@@ -4,6 +4,8 @@ import { use, useEffect, useRef, useState } from "react";
 import { supabase, uniqueChannel, type Profile } from "@/lib/supabase";
 import { signedUrls, uploadImage } from "@/lib/photos";
 import { RequireProfile } from "@/components/RequireProfile";
+import { Reactions } from "@/components/Reactions";
+import { useReactions } from "@/lib/reactions";
 
 type Message = { id: number; sender: string; body: string | null; image_path: string | null; created_at: string };
 
@@ -18,6 +20,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
   const [sending, setSending] = useState(false);
   const [zoom, setZoom] = useState<string | null>(null);
   const bottom = useRef<HTMLDivElement>(null);
+  const reactions = useReactions("private_reactions", messages.map((m) => m.id), me.id);
 
   // Označi chat kao pročitan, da nestane crveni broj u meniju.
   function markRead() {
@@ -114,7 +117,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
       <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Recite si zdravo. 👋</p>}
         {messages.map((m) => (
-          <div key={m.id} className={`flex ${m.sender === me.id ? "justify-end" : ""}`}>
+          <div key={m.id} className={`flex flex-col ${m.sender === me.id ? "items-end" : "items-start"}`}>
             {m.image_path ? (
               urls[m.image_path] ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -126,6 +129,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
                 {m.body}
               </span>
             )}
+            <Reactions items={reactions.forMessage(m.id)} onToggle={(e) => reactions.toggle(m.id, e)} right={m.sender === me.id} />
           </div>
         ))}
         <div ref={bottom} />

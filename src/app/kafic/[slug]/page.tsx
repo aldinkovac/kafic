@@ -5,6 +5,8 @@ import Link from "next/link";
 import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib/supabase";
 import { RequireProfile } from "@/components/RequireProfile";
 import { KafanaBar } from "@/components/KafanaBar";
+import { Reactions } from "@/components/Reactions";
+import { useReactions } from "@/lib/reactions";
 import type { Room as RoomRow } from "@/lib/rooms";
 
 // Poruke bez user_id piše Konobar (bot, uvijek označen kao bot).
@@ -20,6 +22,7 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
   const [notice, setNotice] = useState("");
   const [missing, setMissing] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
+  const reactions = useReactions("room_reactions", messages.filter((m) => !m.is_bot).map((m) => m.id), me.id);
 
   async function loadPeople(ids: (string | null)[]) {
     const missing = ids.filter((id): id is string => !!id && !people[id]);
@@ -129,6 +132,7 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
               {me.is_admin && (
                 <button className="ml-2 text-xs text-red-600 underline" onClick={() => deleteMessage(m.id)}>obriši</button>
               )}
+              <Reactions items={reactions.forMessage(m.id)} onToggle={(e) => reactions.toggle(m.id, e)} />
             </div>
           );
         })}

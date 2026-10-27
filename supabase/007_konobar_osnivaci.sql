@@ -56,7 +56,7 @@ create policy "read room messages" on public.room_messages
 
 create table public.konobar_lines (
   id serial primary key,
-  kind text not null check (kind in ('pozdrav', 'tema')),
+  kind text not null check (kind in ('pozdrav', 'odgovor', 'tema')),
   line text not null
 );
 alter table public.konobar_lines enable row level security;
@@ -70,6 +70,13 @@ insert into public.konobar_lines (kind, line) values
   ('pozdrav', 'Merhaba {ime}! Izvoli, slobodno se uključi u priču.'),
   ('pozdrav', 'Pozdrav {ime}! Prvi put ovdje? Reci odakle si. 👋'),
   ('pozdrav', '{ime}, dobro došao/la u društvo! Kafa, čaj ili sok?'),
+  ('odgovor', 'Čujem te, {ime}! Društvo stiže, a kafa je već tu. ☕'),
+  ('odgovor', '{ime} čeka društvo! Ne stidite se, ovdje niko nikog ne zna. 😄'),
+  ('odgovor', '{ime}, dok čekamo društvo: kafa ili čaj?'),
+  ('odgovor', 'Zapisao sam, {ime}. Hajde ljudi, ko je još za stolom? 👀'),
+  ('odgovor', 'Dobra, {ime}! Ostali, uključite se. 😊'),
+  ('odgovor', '{ime}, donosim još jednu kafu dok neko ne odgovori. ☕'),
+  ('odgovor', 'Ima li koga iz tvog kraja, {ime}? Javite se!'),
   ('tema', 'Pitanje za sto: gdje su najbolji ćevapi u vašem gradu? 🥙'),
   ('tema', 'Kafa ujutro ili čaj? Ko je za džezvu, a ko za espresso? ☕'),
   ('tema', 'Koja pjesma vas uvijek vrati u mladost? 🎶'),
@@ -91,7 +98,9 @@ language sql stable security definer set search_path = public as $$
   select replace(line, '{ime}', ime) from konobar_lines where kind = k order by random() limit 1;
 $$;
 
--- Pozdrav kad neko prvi put napiše nešto u sobi.
+-- Konobar odgovara kad neko napiše nešto u sobi:
+-- prvi put u toj sobi = pozdrav; inače, dok niko drugi ne odgovara, ubaci repliku ili temu.
+-- Da ne bude napadan: najviše jednom u 3 minute po sobi, i šuti kad ljudi razgovaraju međusobno.
 create function public.konobar_greet() returns trigger
 language plpgsql security definer set search_path = public as $$
 declare
@@ -99,14 +108,24 @@ declare
   line text;
 begin
   if new.is_bot then return new; end if;
-  if exists (
+  select nickname into nick from profiles where id = new.user_id;
+
+  if not exists (
     select 1 from room_messages
     where room_id = new.room_id and user_id = new.user_id and id <> new.id
   ) then
-    return new;
+    line := konobar_line('pozdrav', nick);
+  elsif not exists (
+    select 1 from room_messages
+    where room_id = new.room_id and is_bot and created_at > now() - interval '3 minutes'
+  ) and not exists (
+    select 1 from room_messages
+    where room_id = new.room_id and not is_bot and user_id <> new.user_id
+      and created_at > now() - interval '10 minutes'
+  ) then
+    line := case when random() < 0.4 then konobar_line('tema') else konobar_line('odgovor', nick) end;
   end if;
-  select nickname into nick from profiles where id = new.user_id;
-  line := konobar_line('pozdrav', nick);
+
   if line is not null then
     insert into room_messages (room_id, user_id, is_bot, body) values (new.room_id, null, true, line);
   end if;

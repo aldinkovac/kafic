@@ -77,7 +77,7 @@ npm run dev
 
 ## Konobar i osnivači
 
-`007_konobar_osnivaci.sql` dodaje Konobara: bota koji je uvijek jasno označen kao bot. On pozdravi svakog ko prvi put napiše nešto u sobi, a uveče (17 do 24h), kad je neko online, baci temu u sobu koja je tiha više od sat i po. Rečenice se mijenjaju u tabeli `konobar_lines` (Table Editor). Teme se šalju preko dodatka **pg_cron**; ako SQL javi grešku kod zadnje dvije linije, uključi ga u **Database > Extensions** (potraži "pg_cron") i pokreni samo te dvije linije ponovo.
+`007_konobar_osnivaci.sql` dodaje Konobara: bota koji je uvijek jasno označen kao bot. On pozdravi svakog ko prvi put napiše nešto u sobi, odgovori kad neko piše a niko mu ne odgovara (najviše jednom u 3 minute po sobi), a uveče (17 do 24h), kad je neko online, baci temu u sobu koja je tiha više od sat i po. Rečenice se mijenjaju u tabeli `konobar_lines` (Table Editor). Teme se šalju preko dodatka **pg_cron**; ako SQL javi grešku kod zadnje dvije linije, uključi ga u **Database > Extensions** (potraži "pg_cron") i pokreni samo te dvije linije ponovo.
 
 Isti fajl daje doživotni VIP svima koji već imaju profil i svakom ko napravi profil do 30.11.2026. Datum odbrojavanja na naslovnoj mijenjaš u `src/lib/event.ts`.
 

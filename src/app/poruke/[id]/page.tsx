@@ -75,7 +75,10 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
     const body = text.trim();
     setText("");
     const { error } = await sb.from("private_messages").insert({ request_id: requestId, sender: me.id, body });
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+      setText(body);
+    }
   }
 
   async function sendImage(e: React.ChangeEvent<HTMLInputElement>) {

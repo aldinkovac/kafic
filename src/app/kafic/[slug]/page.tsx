@@ -68,7 +68,10 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     const body = text.trim();
     setText("");
     const { error } = await sb.from("room_messages").insert({ room_id: room.id, user_id: me.id, body });
-    if (error) setNotice(error.message);
+    if (error) {
+      setNotice(error.message);
+      setText(body);
+    }
   }
 
   async function deleteMessage(id: number) {

@@ -28,7 +28,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql`, `supabase/007_konobar_osnivaci.sql`, `supabase/008_neprocitano_obavjestenja.sql` i `supabase/009_lajkovi.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql`, `supabase/007_konobar_osnivaci.sql`, `supabase/008_neprocitano_obavjestenja.sql`, `supabase/009_lajkovi.sql` i `supabase/010_ogranicenja.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:

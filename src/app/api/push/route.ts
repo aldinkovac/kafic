@@ -9,6 +9,7 @@ export const runtime = "nodejs";
 const TEXT = {
   private_messages: { body: "Imaš novu poruku ☕", url: "/poruke" },
   chat_requests: { body: "Neko te zove na kafu (privatni chat) ☕", url: "/poruke" },
+  calls: { body: "📹 Neko te zove na video poziv", url: "/poruke" },
 } as const;
 
 type Kind = keyof typeof TEXT;
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
   if (!url || !key || !vapidPublic || !vapidPrivate) return Response.json({ ok: false, reason: "not configured" });
 
   const { kind, id } = (await req.json().catch(() => ({}))) as { kind?: string; id?: number };
-  if (!(kind === "private_messages" || kind === "chat_requests") || !Number.isInteger(id)) {
+  if (!(kind === "private_messages" || kind === "chat_requests" || kind === "calls") || !Number.isInteger(id)) {
     return Response.json({ ok: false }, { status: 400 });
   }
 
@@ -45,18 +46,23 @@ export async function POST(req: Request) {
       .eq("request_id", row.request_id).neq("id", id)
       .gt("pushed_at", new Date(Date.now() - 10 * 60_000).toISOString());
     if (count) return Response.json({ ok: true, sent: 0 });
+  } else if (kind === "calls") {
+    const { data: r } = await sb.from("chat_requests").select("from_user, to_user").eq("id", row.request_id).single();
+    if (!r) return Response.json({ ok: true, sent: 0 });
+    recipient = r.from_user === row.caller ? r.to_user : r.from_user;
   } else {
     recipient = row.to_user;
   }
 
   const { data: subs } = await sb.from("push_subscriptions").select("endpoint, p256dh, auth").eq("user_id", recipient);
   webpush.setVapidDetails("https://kafic.vercel.app", vapidPublic, vapidPrivate);
-  const payload = JSON.stringify({ title: "Kafić", ...TEXT[kind as Kind] });
+  const text = TEXT[kind as Kind];
+  const payload = JSON.stringify({ title: "Kafić", ...text, url: kind === "calls" ? `/poruke/${row.request_id}` : text.url });
 
   let sent = 0;
   await Promise.all(((subs ?? []) as Sub[]).map(async (s) => {
     try {
-      await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 3600 });
+      await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: kind === "calls" ? 60 : 3600 });
       sent++;
     } catch (err) {
       const status = (err as { statusCode?: number }).statusCode;

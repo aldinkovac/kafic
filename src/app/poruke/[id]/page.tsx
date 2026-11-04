@@ -102,7 +102,13 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
   return (
     <div className="flex h-[80vh] flex-col">
       <div className="mb-3 space-y-2">
-        <h1 className="text-2xl font-semibold">{partner.avatar} {partner.nickname}{partner.verified ? " ✓" : ""}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="mr-auto text-2xl font-semibold">{partner.avatar} {partner.nickname}{partner.verified ? " ✓" : ""}</h1>
+          <button className="btn-light" title="Video poziv, kreće zamućen"
+            onClick={() => window.dispatchEvent(new CustomEvent("kafic:call", { detail: { requestId } }))}>
+            📹 Video
+          </button>
+        </div>
         <p className="text-sm text-stone-600 dark:text-stone-400">
           {[partner.city, partner.bio].filter(Boolean).join(" · ") || "Nije napisao/la ništa o sebi."}
         </p>

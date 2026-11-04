@@ -28,7 +28,7 @@ Pravila pristupa su u bazi (row level security), pa niko ne može čitati tuđe 
 ## Pokretanje (jednom)
 
 1. Napravi besplatan projekat na [supabase.com](https://supabase.com). Za regiju izaberi Frankfurt (EU).
-2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql`, `supabase/007_konobar_osnivaci.sql`, `supabase/008_neprocitano_obavjestenja.sql`, `supabase/009_lajkovi.sql` i `supabase/010_ogranicenja.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
+2. U Supabase otvori **SQL Editor**, zalijepi cijeli sadržaj `supabase/schema.sql` i klikni **Run**. Zatim isto uradi s fajlovima `supabase/002_slike_oglasi.sql`, `supabase/003_javni_profili.sql`, `supabase/004_kafane_vip.sql`, `supabase/005_moderacija.sql`, `supabase/006_vip_admin.sql`, `supabase/007_konobar_osnivaci.sql`, `supabase/008_neprocitano_obavjestenja.sql`, `supabase/009_lajkovi.sql`, `supabase/010_ogranicenja.sql` i `supabase/011_video_poziv.sql`. Svaki fajl se pokreće samo jednom, redom po broju.
 3. U **Authentication > URL Configuration** upiši adresu sajta (npr. `https://kafic.vercel.app`) kao Site URL i dodaj `https://kafic.vercel.app/**` u Redirect URLs.
 4. Na [vercel.com](https://vercel.com) se prijavi GitHubom i uvezi repozitorij `kafic`.
 5. U Vercelu dodaj dvije varijable iz Supabase **Settings > API**:
@@ -90,3 +90,13 @@ Za obavještenja kad je sajt zatvoren, u **Vercel > projekat > Settings > Enviro
 Korisnik ih uključi na stranici Poruke ili Profil. Na Androidu i računaru rade odmah; na iPhoneu tek kad se Kafić doda na početni ekran
 (Dijeli > Dodaj na početni ekran). U obavještenju se nikad ne vidi ime ni tekst poruke.
 Ako sajt pređe na drugu adresu, promijeni adresu u funkciji `notify_push` u SQL-u.
+
+## Video poziv
+
+U privatnom chatu dugme **📹 Video** zove sagovornika. Poziv se mora prihvatiti, kamera kreće zamućena i svako sam bira kad će se otkriti
+(blur se pravi prije slanja, pa ga druga strana ne može skinuti). Slika ide direktno između dva uređaja, bez troška za server.
+
+Na nekim mobilnim mrežama direktna veza ne prolazi i treba TURN server. Besplatno (1000 GB mjesečno) preko Cloudflarea:
+1. dash.cloudflare.com > **Realtime** > **TURN Server** > **Create**, daj mu ime "kafic".
+2. Kopiraj **Turn Token ID** i **API Token**.
+3. U Vercelu dodaj `CLOUDFLARE_TURN_KEY_ID` i `CLOUDFLARE_TURN_API_TOKEN`, pa **Redeploy**.

@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { AdminLink } from "@/components/AdminLink";
 import { AppSetup } from "@/components/AppSetup";
+import { CallManager } from "@/components/CallManager";
 import { MessagesLink } from "@/components/MessagesLink";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="bs">
       <body className="antialiased">
         <AppSetup />
+        <CallManager />
         <header className="border-b border-stone-200 dark:border-stone-800">
           <nav className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
             <Link href="/" className="whitespace-nowrap text-lg font-semibold sm:text-xl">☕ Kafić</Link>

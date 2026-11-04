@@ -6,8 +6,12 @@ import { supabase, uniqueChannel, type Profile, type PublicProfile } from "@/lib
 import { RequireProfile } from "@/components/RequireProfile";
 import { KafanaBar } from "@/components/KafanaBar";
 import { Reactions } from "@/components/Reactions";
+import dynamic from "next/dynamic";
 import { useReactions } from "@/lib/reactions";
 import type { Room as RoomRow } from "@/lib/rooms";
+
+// Video za stolom se učitava tek kad zatreba, da soba ostane brza.
+const RoomVideo = dynamic(() => import("@/components/RoomVideo").then((m) => m.RoomVideo), { ssr: false });
 
 // Poruke bez user_id piše Konobar (bot, uvijek označen kao bot).
 type Message = { id: number; user_id: string | null; is_bot: boolean; body: string; created_at: string };
@@ -109,6 +113,7 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
     <div className="flex h-[75vh] flex-col">
       <h1 className="mb-1 text-2xl font-semibold">{room.name}</h1>
       {room.category === "kafana" && <KafanaBar room={room} me={me} onChange={setRoom} />}
+      {process.env.NEXT_PUBLIC_LIVEKIT_URL && <RoomVideo key={room.id} roomId={room.id} me={me} />}
       <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Još je tiho. Budi prvi koji će nešto reći.</p>}
         {messages.map((m) => {

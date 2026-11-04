@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { userFromRequest } from "@/lib/server-auth";
 
 // Serveri za spajanje video poziva. STUN je besplatan i dovoljan za većinu mreža;
 // za mobilne mreže koje blokiraju direktnu vezu treba TURN (Cloudflare, vidi README).
@@ -13,12 +13,7 @@ export async function GET(req: Request) {
   if (!keyId || !token) return Response.json({ iceServers: STUN });
 
   // Samo prijavljeni članovi dobijaju TURN, da niko drugi ne troši naš besplatni promet.
-  const jwt = req.headers.get("authorization")?.replace(/^Bearer /, "");
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!jwt || !url || !anon) return Response.json({ iceServers: STUN });
-  const { data } = await createClient(url, anon, { auth: { persistSession: false } }).auth.getUser(jwt);
-  if (!data.user) return Response.json({ iceServers: STUN });
+  if (!(await userFromRequest(req))) return Response.json({ iceServers: STUN });
 
   try {
     const res = await fetch(`https://rtc.live.cloudflare.com/v1/turn/keys/${keyId}/credentials/generate-ice-servers`, {

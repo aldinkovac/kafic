@@ -100,3 +100,13 @@ Na nekim mobilnim mrežama direktna veza ne prolazi i treba TURN server. Besplat
 1. dash.cloudflare.com > **Realtime** > **TURN Server** > **Create**, daj mu ime "kafic".
 2. Kopiraj **Turn Token ID** i **API Token**.
 3. U Vercelu dodaj `CLOUDFLARE_TURN_KEY_ID` i `CLOUDFLARE_TURN_API_TOKEN`, pa **Redeploy**.
+
+## Video za stolom (sobe i kafane)
+
+Grupni video ide preko LiveKita (besplatan početni plan, poslije se plaća po minuti). Dok ga ne podesiš, dugme se ne prikazuje.
+1. cloud.livekit.io > napravi nalog i projekat "kafic".
+2. **Settings > API Keys > Create key**. Kopiraj **WebSocket URL** (počinje sa wss://), **API Key** i **API Secret**.
+3. U Vercelu dodaj `NEXT_PUBLIC_LIVEKIT_URL`, `LIVEKIT_API_KEY` i `LIVEKIT_API_SECRET`, pa **Redeploy**.
+
+Kamera kreće zamućena i bez zvuka, najviše 12 ljudi na videu po stolu. Svako može prijaviti nekog s videa, a admin ga može izbaciti.
+Banovani ne mogu na video.

@@ -1,13 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { supabase, uniqueChannel } from "@/lib/supabase";
 import { useSession } from "@/lib/useSession";
 
-// "Poruke" u meniju s crvenim brojem nepročitanih poruka i novih zahtjeva, uživo.
-export function MessagesLink() {
+// Broj nepročitanih poruka i novih zahtjeva, uživo.
+export function useUnreadCount() {
   const { user } = useSession();
   const pathname = usePathname();
   const [count, setCount] = useState(0);
@@ -50,14 +49,14 @@ export function MessagesLink() {
     else nav.clearAppBadge?.().catch(() => {});
   }, [count]);
 
+  return count;
+}
+
+export function UnreadBadge({ count, className = "" }: { count: number; className?: string }) {
+  if (count <= 0) return null;
   return (
-    <Link href="/poruke" className="whitespace-nowrap">
-      Poruke
-      {count > 0 && (
-        <span className="ml-1 inline-block min-w-[18px] rounded-full bg-red-600 px-1 text-center align-top text-[11px] font-bold leading-[18px] text-white">
-          {count > 9 ? "9+" : count}
-        </span>
-      )}
-    </Link>
+    <span className={`inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-amber-600 px-1 text-[10px] font-bold text-white ${className}`}>
+      {count > 9 ? "9+" : count}
+    </span>
   );
 }

@@ -27,8 +27,8 @@ export function SiteStats() {
   return (
     <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
       {items.map(([label, n]) => (
-        <div key={label} className="rounded-2xl bg-white p-5 text-center shadow-sm dark:bg-stone-900">
-          <div className="text-3xl font-bold text-amber-700 dark:text-amber-400">
+        <div key={label} className="rounded-2xl bg-white p-5 text-center ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
+          <div className="text-3xl font-extrabold tracking-tight">
             {label === "online sada" && <span className="mr-2 inline-block h-3 w-3 rounded-full bg-green-500 align-middle" />}
             {n.toLocaleString("bs-BA")}
           </div>

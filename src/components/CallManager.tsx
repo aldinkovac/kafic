@@ -129,7 +129,7 @@ export function CallManager() {
       )}
       {inCall && <VideoCall call={call} me={user.id} partner={partner} onEnd={() => finish("Poziv je završen.")} />}
       {toast && (
-        <div className="fixed inset-x-3 bottom-4 z-50 mx-auto max-w-sm rounded-xl bg-stone-900 px-4 py-3 text-center text-sm text-white shadow-xl">{toast}</div>
+        <div className="fixed inset-x-3 bottom-20 z-50 md:bottom-4 mx-auto max-w-sm rounded-xl bg-stone-900 px-4 py-3 text-center text-sm text-white shadow-xl">{toast}</div>
       )}
     </>
   );

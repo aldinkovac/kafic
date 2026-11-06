@@ -40,9 +40,9 @@ function Members({ me }: { me: Profile }) {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-semibold">Članovi</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Članovi</h1>
 
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-white p-3 text-sm shadow-sm dark:bg-stone-900">
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-white p-3 text-sm ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
         <select className="input w-auto" value={gender} onChange={(e) => setGender(e.target.value as Gender | "")}>
           <option value="">Svi</option>
           {Object.entries(GENDER_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
@@ -61,7 +61,7 @@ function Members({ me }: { me: Profile }) {
         {shown.map((m) => {
           const age = ageFromYear(m.birth_year);
           return (
-            <Link key={m.id} href={`/clan/${m.id}`} className={`overflow-hidden rounded-2xl bg-white shadow-sm hover:ring-2 hover:ring-amber-700 dark:bg-stone-900 ${m.vip ? "ring-2 ring-amber-400" : ""}`}>
+            <Link key={m.id} href={`/clan/${m.id}`} className={`overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md hover:ring-2 hover:ring-amber-700 dark:bg-stone-900 ${m.vip ? "ring-2 ring-amber-400" : ""}`}>
               <div className="relative flex aspect-square items-center justify-center bg-amber-100 text-6xl dark:bg-stone-800">
                 {photos[m.id]
                   // eslint-disable-next-line @next/next/no-img-element

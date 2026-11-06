@@ -111,10 +111,10 @@ function Room({ slug, me }: { slug: string; me: Profile }) {
 
   return (
     <div className="flex h-[75vh] flex-col">
-      <h1 className="mb-1 text-2xl font-semibold">{room.name}</h1>
+      <h1 className="mb-1 text-3xl font-extrabold tracking-tight">{room.name}</h1>
       {room.category === "kafana" && <KafanaBar room={room} me={me} onChange={setRoom} />}
       {process.env.NEXT_PUBLIC_LIVEKIT_URL && <RoomVideo key={room.id} roomId={room.id} me={me} />}
-      <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
+      <div className="flex-1 space-y-2 overflow-y-auto rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Još je tiho. Budi prvi koji će nešto reći.</p>}
         {messages.map((m) => {
           if (m.is_bot) {

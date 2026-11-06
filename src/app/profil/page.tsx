@@ -125,7 +125,7 @@ export default function ProfilPage() {
   return (
     <form onSubmit={save} className="max-w-md space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-semibold">{profile ? "Tvoj profil" : "Napravi profil"}</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">{profile ? "Tvoj profil" : "Napravi profil"}</h1>
         {profile && (isVip(profile)
           ? <span className="rounded-full bg-amber-400 px-3 py-1 text-sm font-semibold text-stone-900">⭐ VIP do {new Date(profile.vip_until!).toLocaleDateString("bs-BA")}</span>
           : <Link href="/vip" className="text-sm text-amber-800 underline dark:text-amber-300">Postani VIP ⭐</Link>)}

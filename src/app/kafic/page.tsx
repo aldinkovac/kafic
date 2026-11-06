@@ -9,7 +9,7 @@ import { RequireProfile } from "@/components/RequireProfile";
 
 function RoomCard({ r, badge }: { r: Room; badge?: string }) {
   return (
-    <Link href={`/kafic/${r.slug}`} className="rounded-xl border border-stone-200 p-4 hover:border-amber-700 dark:border-stone-800">
+    <Link href={`/kafic/${r.slug}`} className="group rounded-2xl bg-white p-5 ring-1 ring-stone-200/80 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-stone-900/5 hover:ring-stone-300 dark:bg-stone-900 dark:ring-stone-800 dark:hover:ring-stone-600">
       <div className="flex items-center gap-2 font-semibold">
         {r.name}
         {badge && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-normal text-amber-900 dark:bg-amber-900/40 dark:text-amber-200">{badge}</span>}
@@ -42,7 +42,7 @@ function NewKafana({ me, onCancel }: { me: Profile; onCancel: () => void }) {
   }
 
   return (
-    <form onSubmit={create} className="space-y-3 rounded-2xl bg-white p-4 shadow-sm dark:bg-stone-900">
+    <form onSubmit={create} className="space-y-3 rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
       <h2 className="font-semibold">Otvori svoju kafanu</h2>
       <input className="input" required minLength={3} maxLength={40} placeholder="Ime kafane, npr. Kod Mehe" value={name} onChange={(e) => setName(e.target.value)} />
       <input className="input" maxLength={120} placeholder="Kratki opis (neobavezno)" value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -83,7 +83,7 @@ function Rooms({ me }: { me: Profile }) {
     <div className="space-y-8">
       <section className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="mr-auto text-2xl font-semibold">Kafane</h1>
+          <h1 className="mr-auto text-3xl font-extrabold tracking-tight">Kafane</h1>
           {!creating && <button className="btn" onClick={() => setCreating(true)}>+ Otvori svoju kafanu</button>}
         </div>
         <p className="text-sm text-stone-600 dark:text-stone-400">

@@ -103,7 +103,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
     <div className="flex h-[80vh] flex-col">
       <div className="mb-3 space-y-2">
         <div className="flex items-center gap-3">
-          <h1 className="mr-auto text-2xl font-semibold">{partner.avatar} {partner.nickname}{partner.verified ? " ✓" : ""}</h1>
+          <h1 className="mr-auto text-3xl font-extrabold tracking-tight">{partner.avatar} {partner.nickname}{partner.verified ? " ✓" : ""}</h1>
           <button className="btn-light" title="Video poziv, kreće zamućen"
             onClick={() => window.dispatchEvent(new CustomEvent("kafic:call", { detail: { requestId } }))}>
             📹 Video
@@ -123,7 +123,7 @@ function PrivateChat({ requestId, me }: { requestId: number; me: Profile }) {
         )}
       </div>
 
-      <div className="flex-1 space-y-2 overflow-y-auto rounded-xl border border-stone-200 p-3 dark:border-stone-800">
+      <div className="flex-1 space-y-2 overflow-y-auto rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
         {messages.length === 0 && <p className="text-sm text-stone-500">Recite si zdravo. 👋</p>}
         {messages.map((m) => (
           <div key={m.id} className={`flex flex-col ${m.sender === me.id ? "items-end" : "items-start"}`}>

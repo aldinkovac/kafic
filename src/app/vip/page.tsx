@@ -14,7 +14,7 @@ export default function VipPage() {
 
       <FounderNote />
 
-      <div className="space-y-4 rounded-3xl bg-white p-6 shadow-sm dark:bg-stone-900">
+      <div className="space-y-4 rounded-3xl bg-white p-6 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
         <div className="text-center text-2xl font-bold text-amber-700 dark:text-amber-400">{VIP_PRICE}</div>
         <ul className="space-y-3">
           {VIP_PERKS.map(([icon, text]) => (

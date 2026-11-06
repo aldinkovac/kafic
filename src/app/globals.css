@@ -1,29 +1,81 @@
 @import "tailwindcss";
 
+/*
+  Dizajn: svijetlo, čisto, puno bijelog prostora.
+  Tekst je skoro crn, a jedina jaka boja je topla koralna (kao espresso krema na suncu).
+  Postojeće klase amber-* i stone-* su ovdje preslikane na novu paletu,
+  pa sve stranice dobiju novi izgled bez mijenjanja svake klase posebno.
+*/
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Koralna: glavni akcent */
+  --color-amber-50: #fff5f2;
+  --color-amber-100: #ffe8e1;
+  --color-amber-200: #ffcfc2;
+  --color-amber-300: #ffab96;
+  --color-amber-400: #ff8466;
+  --color-amber-500: #fb6845;
+  --color-amber-600: #ef5232;
+  --color-amber-700: #d9432a;
+  --color-amber-800: #b33724;
+  --color-amber-900: #8f2f22;
+  --color-amber-950: #4d140c;
+
+  /* Neutralna siva umjesto smeđkaste */
+  --color-stone-50: #fafafa;
+  --color-stone-100: #f4f4f5;
+  --color-stone-200: #e8e8eb;
+  --color-stone-300: #d6d6db;
+  --color-stone-400: #a1a1aa;
+  --color-stone-500: #71717a;
+  --color-stone-600: #52525b;
+  --color-stone-700: #3f3f46;
+  --color-stone-800: #27272a;
+  --color-stone-900: #18181b;
+  --color-stone-950: #0c0c0e;
+}
+
 :root {
-  --background: #faf7f2;
-  --foreground: #2b2118;
+  --background: #f6f6f7;
+  --foreground: #121214;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #17120e;
-    --foreground: #f1e9df;
+    --background: #0c0c0e;
+    --foreground: #f4f4f5;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Glavno dugme: crno na svijetlom, bijelo na tamnom. */
 .btn {
-  @apply rounded-full bg-amber-700 px-5 py-2 font-medium text-white hover:bg-amber-800 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-stone-950 px-5 py-2.5 font-semibold text-white transition hover:bg-stone-800 active:scale-[0.98] disabled:opacity-50 dark:bg-white dark:text-stone-950 dark:hover:bg-stone-200;
+}
+/* Koralno dugme za najvažniji poziv na akciju. */
+.btn-accent {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-amber-600 px-5 py-2.5 font-semibold text-white shadow-lg shadow-amber-600/25 transition hover:bg-amber-700 active:scale-[0.98] disabled:opacity-50;
 }
 .btn-light {
-  @apply rounded-full border border-amber-700 px-5 py-2 font-medium text-amber-800 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-stone-800;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-white px-5 py-2.5 font-semibold text-stone-900 transition hover:border-stone-300 hover:bg-stone-50 active:scale-[0.98] dark:border-stone-700 dark:bg-transparent dark:text-stone-100 dark:hover:bg-stone-800;
 }
 .input {
-  @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100;
+  @apply w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-stone-900 transition outline-none placeholder:text-stone-400 focus:border-stone-900 focus:bg-white dark:border-stone-800 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-stone-400;
+}
+.card {
+  @apply rounded-3xl border border-stone-200/70 bg-white dark:border-stone-800 dark:bg-stone-900;
+}
+.eyebrow {
+  @apply text-xs font-semibold uppercase tracking-[0.18em] text-stone-500;
 }

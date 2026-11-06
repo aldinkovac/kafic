@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { supabase, takeRememberedPath } from "@/lib/supabase";
+import { PHOTOS } from "@/lib/stock-photos";
 
 type Mode = "login" | "register" | "link" | "forgot";
 
@@ -65,18 +67,21 @@ export default function Prijava() {
 
   if (sent) {
     return (
-      <div className="max-w-sm space-y-2">
-        <h1 className="text-2xl font-semibold">Provjeri email</h1>
-        <p>{sent}</p>
+      <AuthShell>
+      <div className="space-y-2">
+        <h1 className="text-3xl font-extrabold tracking-tight">Provjeri email</h1>
+        <p className="text-stone-600 dark:text-stone-400">{sent}</p>
       </div>
+      </AuthShell>
     );
   }
 
   const needsPassword = mode === "login" || mode === "register";
 
   return (
-    <form onSubmit={submit} className="max-w-sm space-y-4">
-      <h1 className="text-2xl font-semibold">{TITLES[mode]}</h1>
+    <AuthShell>
+    <form onSubmit={submit} className="space-y-4">
+      <h1 className="text-3xl font-extrabold tracking-tight">{TITLES[mode]}</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">Bez Facebooka. Tvoj email niko drugi ne vidi.</p>
 
       <input className="input" type="email" required placeholder="tvoj@email.com" autoComplete="email"
@@ -88,16 +93,33 @@ export default function Prijava() {
       )}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button className="btn w-full" type="submit" disabled={busy}>
+      <button className="btn w-full py-3" type="submit" disabled={busy}>
         {busy ? "…" : { login: "Prijavi se", register: "Napravi nalog", link: "Pošalji link", forgot: "Pošalji link za novu lozinku" }[mode]}
       </button>
 
-      <div className="space-y-1 text-sm">
-        {mode !== "login" && <button type="button" className="block underline" onClick={() => setMode("login")}>Imam nalog, prijavi me lozinkom</button>}
-        {mode !== "register" && <button type="button" className="block underline" onClick={() => setMode("register")}>Nemam nalog, napravi novi</button>}
-        {mode === "login" && <button type="button" className="block underline" onClick={() => setMode("forgot")}>Zaboravio/la sam lozinku</button>}
-        {mode !== "link" && <button type="button" className="block text-stone-500 underline" onClick={() => setMode("link")}>Uđi bez lozinke, linkom na email</button>}
+      <div className="space-y-2 border-t border-stone-200 pt-4 text-sm text-stone-600 dark:border-stone-800 dark:text-stone-400">
+        {mode !== "login" && <button type="button" className="block hover:text-stone-950 hover:underline dark:hover:text-white" onClick={() => setMode("login")}>Imam nalog, prijavi me lozinkom</button>}
+        {mode !== "register" && <button type="button" className="block hover:text-stone-950 hover:underline dark:hover:text-white" onClick={() => setMode("register")}>Nemam nalog, napravi novi</button>}
+        {mode === "login" && <button type="button" className="block hover:text-stone-950 hover:underline dark:hover:text-white" onClick={() => setMode("forgot")}>Zaboravio/la sam lozinku</button>}
+        {mode !== "link" && <button type="button" className="block text-stone-500 hover:underline" onClick={() => setMode("link")}>Uđi bez lozinke, linkom na email</button>}
       </div>
     </form>
+    </AuthShell>
+  );
+}
+
+// Forma lijevo, fotografija desno (na telefonu samo forma).
+function AuthShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid min-h-[70vh] items-stretch gap-6 md:grid-cols-2">
+      <div className="flex items-center justify-center">
+        <div className="card w-full max-w-sm p-7 shadow-xl shadow-stone-900/5">{children}</div>
+      </div>
+      <div className="relative hidden overflow-hidden rounded-[2rem] bg-stone-200 md:block dark:bg-stone-800">
+        <Image src={PHOTOS.prijateljice.src} alt={PHOTOS.prijateljice.alt} fill sizes="560px" className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent" />
+        <p className="absolute inset-x-8 bottom-8 text-3xl font-extrabold leading-tight text-white">Tvoje ime ostaje tvoje.<br />Društvo je ovdje.</p>
+      </div>
+    </div>
   );
 }

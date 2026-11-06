@@ -77,7 +77,7 @@ function Member({ id, me }: { id: string; me: Profile }) {
             : m.avatar}
         </div>
         <div>
-          <h1 className="text-2xl font-semibold">{m.vip ? "⭐ " : ""}{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">{m.vip ? "⭐ " : ""}{m.nickname}{m.verified ? " ✓" : ""}{age ? `, ${age}` : ""}</h1>
           <p className="text-sm text-stone-500">{m.online ? "🟢 Online" : "Offline"}{m.city ? ` · ${m.city}` : ""}</p>
         </div>
       </div>
@@ -92,13 +92,13 @@ function Member({ id, me }: { id: string; me: Profile }) {
         <>
           <div className="flex flex-wrap gap-2">
             {facts.filter(([, v]) => v).map(([k, v]) => (
-              <span key={k} className="rounded-full bg-white px-3 py-1 text-sm shadow-sm dark:bg-stone-900">
+              <span key={k} className="rounded-full bg-white px-3 py-1 text-sm ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
                 <span className="text-stone-500">{k}:</span> {v}
               </span>
             ))}
             {m.instagram && (
               <a href={`https://instagram.com/${m.instagram}`} target="_blank" rel="noopener noreferrer nofollow"
-                className="rounded-full bg-white px-3 py-1 text-sm text-amber-800 underline shadow-sm dark:bg-stone-900 dark:text-amber-300">
+                className="rounded-full bg-white px-3 py-1 text-sm text-amber-800 underline ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800 dark:text-amber-300">
                 📷 @{m.instagram}
               </a>
             )}

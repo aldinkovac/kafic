@@ -1,7 +1,7 @@
 export default function Privatnost() {
   return (
     <article className="max-w-2xl space-y-4 text-sm leading-6">
-      <h1 className="text-2xl font-semibold">Privatnost i uslovi korištenja</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Privatnost i uslovi korištenja</h1>
       <p className="rounded-lg bg-amber-50 p-3 dark:bg-stone-800">
         Nacrt. Prije javnog lansiranja ovaj tekst treba pregledati advokat, u skladu sa Zakonom o zaštiti ličnih podataka BiH (Službeni glasnik BiH 12/25).
       </p>

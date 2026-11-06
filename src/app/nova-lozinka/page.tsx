@@ -19,7 +19,7 @@ export default function NovaLozinka() {
 
   return (
     <form onSubmit={submit} className="max-w-sm space-y-4">
-      <h1 className="text-2xl font-semibold">Nova lozinka</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Nova lozinka</h1>
       <input className="input" type="password" required minLength={8} placeholder="Nova lozinka (najmanje 8 znakova)"
         autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
       {error && <p className="text-sm text-red-600">{error}</p>}

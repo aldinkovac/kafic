@@ -50,14 +50,14 @@ function Inbox({ me }: { me: Profile }) {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Poruke</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Poruke</h1>
       <PushSetup userId={me.id} />
 
       <section className="space-y-2">
         <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">Zahtjevi za tebe</h2>
         {incoming.length === 0 && <p className="text-sm text-stone-500">Nema novih zahtjeva.</p>}
         {incoming.map((r) => (
-          <div key={r.id} className="flex items-center gap-2 rounded-xl border border-stone-200 p-3 dark:border-stone-800">
+          <div key={r.id} className="flex items-center gap-2 rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
             <span className="mr-auto">{name(other(r))} te zove na privatni chat</span>
             <button className="btn" onClick={() => answer(r.id, "accepted")}>Prihvati</button>
             <button className="btn-light" onClick={() => answer(r.id, "declined")}>Odbij</button>
@@ -69,10 +69,10 @@ function Inbox({ me }: { me: Profile }) {
         <h2 className="text-sm font-medium uppercase tracking-wide text-stone-500">Privatni chatovi</h2>
         {chats.length === 0 && <p className="text-sm text-stone-500">Još nemaš privatnih chatova. Pozovi nekog iz sobe.</p>}
         {chats.map((r) => (
-          <Link key={r.id} href={`/poruke/${r.id}`} className="flex items-center rounded-xl border border-stone-200 p-3 hover:border-amber-700 dark:border-stone-800">
+          <Link key={r.id} href={`/poruke/${r.id}`} className="flex items-center rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 transition hover:ring-stone-400 dark:bg-stone-900 dark:ring-stone-800">
             <span className={`mr-auto ${unread[r.id] ? "font-semibold" : ""}`}>{name(other(r))}</span>
             {!!unread[r.id] && (
-              <span className="rounded-full bg-red-600 px-2 text-xs font-bold leading-5 text-white">{unread[r.id]} nova</span>
+              <span className="rounded-full bg-amber-600 px-2 text-xs font-bold leading-5 text-white">{unread[r.id]} nova</span>
             )}
           </Link>
         ))}

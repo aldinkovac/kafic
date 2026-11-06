@@ -81,7 +81,7 @@ function Admin({ me }: { me: Profile }) {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-semibold">Admin</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight">Admin</h1>
       {notice && <p className="text-sm text-stone-600 dark:text-stone-300">{notice}</p>}
 
       <section className="space-y-3">
@@ -96,7 +96,7 @@ function Admin({ me }: { me: Profile }) {
           const target = people[r.reported];
           const banned = target?.banned_until && new Date(target.banned_until) > new Date();
           return (
-            <div key={r.id} className={`space-y-2 rounded-2xl bg-white p-4 shadow-sm dark:bg-stone-900 ${r.resolved ? "opacity-60" : ""}`}>
+            <div key={r.id} className={`space-y-2 rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800 ${r.resolved ? "opacity-60" : ""}`}>
               <div className="text-sm text-stone-500">
                 {new Date(r.created_at).toLocaleString("bs-BA")} · {name(r.reporter)} prijavio/la{" "}
                 <Link href={`/clan/${r.reported}`} className="font-semibold text-stone-900 underline dark:text-stone-100">{name(r.reported)}</Link>
@@ -193,7 +193,7 @@ function VipGrant() {
         <button className="btn" type="submit">Traži</button>
       </form>
       {found.map((r) => (
-        <div key={r.id} className="flex flex-wrap items-center gap-2 rounded-xl bg-white p-3 text-sm shadow-sm dark:bg-stone-900">
+        <div key={r.id} className="flex flex-wrap items-center gap-2 rounded-xl bg-white p-3 text-sm ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
           <span className="mr-auto font-medium">{r.nickname}{r.vip_until && new Date(r.vip_until) > new Date() ? ` · VIP do ${new Date(r.vip_until).toLocaleDateString("bs-BA")}` : ""}</span>
           <button className="btn-light" onClick={() => extend(r, 1)}>+1 mjesec</button>
           <button className="btn-light" onClick={() => extend(r, 12)}>+1 godina</button>

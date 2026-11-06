@@ -82,7 +82,7 @@ function Ads({ me }: { me: Profile }) {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="mr-auto text-2xl font-semibold">Lični oglasi</h1>
+        <h1 className="mr-auto text-3xl font-extrabold tracking-tight">Lični oglasi</h1>
         <select className="input w-auto" value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>
           <option value="">Svi oglasi</option>
           {Object.entries(LOOKING_FOR).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
@@ -91,7 +91,7 @@ function Ads({ me }: { me: Profile }) {
       </div>
 
       {showForm && (
-        <form onSubmit={post} className="space-y-3 rounded-2xl bg-white p-4 shadow-sm dark:bg-stone-900">
+        <form onSubmit={post} className="space-y-3 rounded-2xl bg-white p-4 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
           <input className="input" required minLength={3} maxLength={80} placeholder="Naslov, npr. Tražim društvo za kafu u Mostaru"
             value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           <textarea className="input" required minLength={10} maxLength={1000} rows={4} placeholder="Napiši nešto o sebi i koga tražiš…"
@@ -115,7 +115,7 @@ function Ads({ me }: { me: Profile }) {
         {shown.map((ad) => {
           const u = people[ad.user_id];
           return (
-            <article key={ad.id} className="space-y-2 rounded-2xl bg-white p-5 shadow-sm dark:bg-stone-900">
+            <article key={ad.id} className="space-y-2 rounded-2xl bg-white p-5 ring-1 ring-stone-200/80 dark:bg-stone-900 dark:ring-stone-800">
               <div className="flex items-center gap-2 text-sm text-stone-500">
                 <span>{u ? `${u.avatar} ${u.nickname}${u.verified ? " ✓" : ""}` : "…"}</span>
                 <span>·</span>
